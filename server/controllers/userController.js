@@ -6,77 +6,64 @@ const userController = {};
 // Create new user
 userController.createUser = (req, res, next) => {
 
-  const {username, password} = req.body;
+  const { username, password } = req.body;
 
   if (!username || !password) {
     return next({
       log: "userController.createUser",
-      message: { err: "userController.createUser: username and password must be provided"},
+      message: { err: "userController.createUser: username and password must be provided" },
     });
   }
-  User.create({username, password})
+  User.create({ username, password })
     .then((user) => {
-        res.locals.user = user;
-        next();
-      })
-      .catch((err) => {
-        if (err.code === 11000) {
-          console.log(err)
-          return next ({
-            log: "userController.verifyUser",
-            status: 400,
-            message: { err: 'username already exists' },
-          })
-        }
-        return next({
-          log: "userController.verifyUser",
-          message: { err: "userController.verifyUser" + err },
-        });
-      });
-  }
-
-// Verify user
-userController.verifyUser = (req, res, next) => {
-
-  const { username, password } = req.body;
-
-  // ERROR HANDLING
-  if (!username || !password) {
-    console.log(
-      "Error in userController.verifyUser: username and password must be provided"
-    );
-    return next("username and password must be provided");
-  }
-
-  // check if req.body.username matches a username in the database
-
-  User.findOne({ username: username })
-    .exec()
-    .then((user) => {
-      if (!user || password !== user.password) {
-        console.log("no password match");
-        return res.redirect("/signup");
-      }
-      // valid user
-      else {
-        console.log("res.locals: ", res.locals);
-        res.locals.user = user;  // _id, username, password, boardIDs
-        return next();
-      }
+      res.locals.user = user;
+      console.log(user);
+      next();
     })
     .catch((err) => {
+      if (err.code === 11000) {
+        console.log(err)
+        return next({
+          log: "userController.verifyUser",
+          status: 400,
+          message: { err: 'username already exists' },
+        })
+      }
       return next({
         log: "userController.verifyUser",
         message: { err: "userController.verifyUser" + err },
       });
     });
+}
+
+// Verify user
+userController.verifyUser = async (req, res, next) => {
+  try {
+    const { username, password } = req.body;
+    // ERROR HANDLING
+    if (!username || !password) throw new Error('username and password must be provided');
+
+    // check if req.body.username matches a username in the database
+    const response = await User.findOne({ username: username }).exec();
+    if (!response) throw new Error(`User '${username}' not found`);
+    const isPasswordMatch = await response.comparePassword(password);
+    if (!isPasswordMatch) throw new Error(`Password does not match`);
+    res.locals.user = response;
+    return next();
+  } catch (error) {
+    // Intentionally vague in the front end response for security purposes
+    return next({
+      log: error,
+      message: { err: "Error occurred in userController.verifyUser" },
+    });
+  }
 };
 
-userController.getBoardIds= (req, res, next) => {
+userController.getBoardIds = (req, res, next) => {
   console.log('running userController.getBoardIds. req.body: ', req.body)
   let { username } = req.body;
 
-  User.findOne({username}).exec()
+  User.findOne({ username }).exec()
     .then(response => {
       res.locals.boardIds = response.board_ids
       return next();

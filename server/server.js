@@ -37,13 +37,13 @@ app.use(cors());
 app.use("/build", express.static(path.resolve(__dirname, "../build")));
 
 // route handlers
-app.post('/api', 
-  // sessionController.isLoggedIn,
-  userController.getBoardIds, 
-  boardController.getBoards, 
+app.post('/api',
+  sessionController.isLoggedIn,
+  userController.getBoardIds,
+  boardController.getBoards,
   (req, res) => {
     res.status(200).json(res.locals.boards)
-})
+  })
 
 app.get('/boards/:board_id', 
   // sessionController.isLoggedIn,
@@ -56,10 +56,9 @@ app.get('/boards/:board_id',
 app.post(
   "/login",
   userController.verifyUser,
-  // sessionController.startSession,
-  // cookieController.setSSIDCookie,
-  (req, res) => {
-    // what should happen here on successful log in?
+  sessionController.startSession,
+  cookieController.setSSIDCookie,
+  (_, res) => {
     console.log("completing post request to '/login");
     // res.redirect('/secret');
     // res.sendStatus(200);
