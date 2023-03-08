@@ -3,30 +3,25 @@ import { useState, useEffect } from 'react';
 import HomePage from './HomePage.jsx'
 // import { Outlet, Link } from "react-router-dom";
 
-function LoginPage ({user, setUser, password, setPassword, toggle, isLoggedIn, setLogin, setBoardData, setLoginError}) {
+function LoginPage({ user, setUser, password, setPassword, toggle, isLoggedIn, setLogin, setBoardData, setLoginError }) {
 
     //HANDLE LOGIN
     const handleSubmit = (e) => {
         e.preventDefault();
-        const loginData = {username: user, password: password}
+        const loginData = { username: user, password: password }
         fetch('/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(loginData)
         }).then((res) => {
             console.log(res.status)
-            if (res.status === 404) {
-                setLogin(false)
-                setLoginError(true)
-            } else {
-                setLogin(true);
-                setLoginError(false);
-            }
-            console.log('logged in on LoginPage.jsx')
-            // console.log('users data', user)
+            const isLoginSuccessful = res.status === 200;
+            setLogin(isLoginSuccessful);
+            setLoginError(!isLoginSuccessful);
+            if (isLoginSuccessful) console.log('logged in on LoginPage.jsx');
         }).catch((error) => {
             console.log('incorrect username or password', error)
-        }) 
+        })
     }
     //RENDER
     return (
@@ -36,23 +31,23 @@ function LoginPage ({user, setUser, password, setPassword, toggle, isLoggedIn, s
                 <form className='loginForm' onSubmit={handleSubmit}>
                     <div className='formLine'>
                         <label className='login-text' htmlFor="username">Username/Email</label>
-                        <input className='user-input' type='text' required onChange={(e) => setUser(e.target.value)}/>
+                        <input className='user-input' type='text' required onChange={(e) => setUser(e.target.value)} />
                     </div>
                     <div className='formLine'>
                         <label className='login-text' htmlFor="password">Password</label>
-                        <input className='user-input' type='password' required onChange={(e) => setPassword(e.target.value)}/>
+                        <input className='user-input' type='password' required onChange={(e) => setPassword(e.target.value)} />
                     </div>
                     <button className='submit'>Login</button>
                 </form>
-                    <div className='login-footer'>
-                        Don't have an Account? <button onClick={toggle}>Sign up here!</button>
-                    </div>
+                <div className='login-footer'>
+                    Don't have an Account? <button onClick={toggle}>Sign up here!</button>
+                </div>
             </div>
-            {isLoggedIn && <HomePage />} 
+            {isLoggedIn && <HomePage />}
         </div>
     )
 }
- 
+
 export default LoginPage;
 
 

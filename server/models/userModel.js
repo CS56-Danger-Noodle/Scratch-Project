@@ -1,9 +1,8 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const bcrypt = require('bcryptjs');
 
-// bcrypt
-// const SALT_WORK_FACTOR = 10;
-// const bcrypt = require('bcryptjs');
+const SALT_WORK_FACTOR = 10;
 
 /**
  * DUMMY:
@@ -16,17 +15,19 @@ const userSchema = new Schema({
   board_ids: [String],
 });
 
-// userSchema.pre('save', function(next) {
-//   // bcrypt.hash()
-//   console.log('PRE SAVE', this.password);
-//   return next();
-// });
-// userSchema.pre('find', function(next) {
-//   // bcrypt.hash()
-//   //'this' is not pulling the find inputs - why?
-//   console.log('PRE FIND', this);
-//   return next();
-// })
+userSchema.pre('save', function (next) {
+  bcrypt.hash(this.password, SALT_WORK_FACTOR)
+    .then(hash => this.password = hash)
+    .then(() => next()).catch(error => next({
+      log: error,
+      // The message is intentionally vague for security reasons
+      message: { err: 'Failed to save credentials' }
+    }))
+})
+
+userSchema.methods.comparePassword = async function (candidatePassword) {
+  return await bcrypt.compare(candidatePassword, this.password);
+}
 
 const User = mongoose.model("users", userSchema);
 
