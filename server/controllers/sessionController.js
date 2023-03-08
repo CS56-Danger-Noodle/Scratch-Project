@@ -1,5 +1,3 @@
-const Session = require("../models/sessionModel");
-
 const sessionController = {};
 
 /**
@@ -8,44 +6,12 @@ const sessionController = {};
  */
 sessionController.isLoggedIn = (req, res, next) => {
   console.log("running sessionControlled.isLoggedIn");
-  // get SSID from cookie on request
-  console.log("ssid cookie_id: ", req.cookies.ssid);
-
-  // query the DB for a matching cookieID in the session document
-  Session.findOne({ cookieId: req.cookies.ssid })
-    .then((session) => {
-      console.log('query returned: ', session)
-      // if there is a match - We're LOGGED IN - return next();
-      if (session && session.cookieId === req.cookies.ssid) {
-        console.log('Session.cookie matches req.cookies.ssid.  User isLoggedIn.  Moving on to next middleware')
-        return next();
-      }
-      else {
-        return next('No Session.cookie matches req.cookies.ssid.  User NOT logged in.');
-      }
-    })
-    // if no match, redirect or something.  FAIL.
-    .catch((err) => {
-      return next({
-        log: "error in sessionController.isLoggedIn",
-        message: { err: "sessionController.isLoggedIn" + err },
-      });
-    });
-
-  // Session.findOne({ cookieId: req.cookies.ssid}, (err, session) => {
-  //   if (err) {
-  //     // DB error
-  //     return next('Error in sessionController.isLoggedIn: ' + JSON.stringify(err));
-  //   }
-  //   else if (!session) {
-  //     // no session found (session = null)
-  //     res.redirect('/signup');
-  //   }
-  //   else {
-  //     // session found
-  //     return next();
-  //   }
-  // })
+  console.log("session object: ", req.session);
+  if (req.session.username) return next();
+  return next({
+    log: "'No username value in session object. User NOT logged in.'",
+    message: { err: 'User is not logged in.' },
+  });
 };
 
 /**
@@ -53,18 +19,23 @@ sessionController.isLoggedIn = (req, res, next) => {
  */
 sessionController.startSession = (req, res, next) => {
   console.log("running sessionController.startSession");
-  console.log("user: ", res.locals.user);
-  Session.create({ cookieId: res.locals.user.user_id.toString() })
-    .then((data) => {
-      console.log("created new session: ", data);
+
+  const createErrorObject = (error) => {
+    return {
+      log: "error in sessionController.startSession",
+      message: { err: "sessionController.startSession" + error },
+    };
+  }
+  // Per docs: regenerate the session, which is good practice to help
+  // guard against forms of session fixation
+  req.session.regenerate(error => {
+    if (error) return next(createErrorObject(error));
+    req.session.username = res.locals.user.username;
+    req.session.save(error => {
+      if (error) return next(createErrorObject(error));
       return next();
     })
-    .catch((err) => {
-      return next({
-        log: "error in sessionController.startSession",
-        message: { err: "sessionController.startSession" + err },
-      });
-    });
+  });
 };
 
 module.exports = sessionController;
