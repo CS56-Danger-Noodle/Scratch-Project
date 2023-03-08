@@ -16,8 +16,7 @@ userController.createUser = (req, res, next) => {
   }
   User.create({ username, password })
     .then((user) => {
-      res.locals.user = user;
-      console.log(user);
+      res.locals.user = { user_id: user._id, username, board_ids: user.board_ids };
       next();
     })
     .catch((err) => {
@@ -38,17 +37,20 @@ userController.createUser = (req, res, next) => {
 
 // Verify user
 userController.verifyUser = async (req, res, next) => {
+  console.log('running userController.verifyUser')
   try {
     const { username, password } = req.body;
+    // console.log('req.body: ', req.body);
     // ERROR HANDLING
     if (!username || !password) throw new Error('username and password must be provided');
 
     // check if req.body.username matches a username in the database
     const response = await User.findOne({ username: username }).exec();
+    console.log('response: ', response)
     if (!response) throw new Error(`User '${username}' not found`);
     const isPasswordMatch = await response.comparePassword(password);
     if (!isPasswordMatch) throw new Error(`Password does not match`);
-    res.locals.user = response;
+    res.locals.user = { user_id: response._id, username, board_ids: response.board_ids };
     return next();
   } catch (error) {
     // Intentionally vague in the front end response for security purposes
