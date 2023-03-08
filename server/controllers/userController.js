@@ -16,8 +16,7 @@ userController.createUser = (req, res, next) => {
   }
   User.create({ username, password })
     .then((user) => {
-      res.locals.user = user;
-      console.log(user);
+      res.locals.username = user.username;
       next();
     })
     .catch((err) => {
@@ -48,7 +47,7 @@ userController.verifyUser = async (req, res, next) => {
     if (!response) throw new Error(`User '${username}' not found`);
     const isPasswordMatch = await response.comparePassword(password);
     if (!isPasswordMatch) throw new Error(`Password does not match`);
-    res.locals.user = response;
+    res.locals.username = response.username;
     return next();
   } catch (error) {
     // Intentionally vague in the front end response for security purposes

@@ -2,15 +2,17 @@ const path = require("path");
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const session = require('express-session');
 const userController = require("./controllers/userController");
 const sessionController = require("./controllers/sessionController");
-const cookieController = require("./controllers/cookieController");
 const boardController = require("./controllers/boardController");
-const cookieParser = require("cookie-parser");
 
 // setup app and port
 const app = express();
 const PORT = process.env.PORT || 3000;
+// Ideally this should be stored in a .env file or something similar
+const SECRET = 'PpHbKAXUt6iC5Z80OWrGwKNVYQsOqdra';
+const THIRTY_SECONDS = 30 * 60;
 
 const mongoURI =
   "mongodb+srv://shendo87:UIOqlCfrXxZJYeJL@cluster0.kzkmgom.mongodb.net/?retryWrites=true&w=majority";
@@ -28,7 +30,21 @@ mongoose
 // handle parsing request body
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
+// By default, the session `store` instance defaults to a new `MemoryStore` instance
+// It is NOT intended to be used in production
+// If this application moves to production, a different store instance 
+// (e.g. MongoDB, redis) needs to be setup
+app.use(session({
+  secret: SECRET,
+  resave: false,
+  saveUninitialized: false,
+  name: 'sessionId',
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: THIRTY_SECONDS
+  }
+
+}))
 
 // enable ALL CORS requests
 app.use(cors());
@@ -41,7 +57,7 @@ app.post('/api',
   sessionController.isLoggedIn,
   userController.getBoardIds,
   boardController.getBoards,
-  (req, res) => {
+  (_, res) => {
     res.status(200).json(res.locals.boards)
   })
 
@@ -49,9 +65,9 @@ app.post(
   "/login",
   userController.verifyUser,
   sessionController.startSession,
-  cookieController.setSSIDCookie,
   (_, res) => {
     console.log("completing post request to '/login");
+    // TODO: This will need to send back board IDs for the front end
     res.sendStatus(200);
   }
 );
@@ -60,8 +76,7 @@ app.post(
   "/signup",
   userController.createUser,
   sessionController.startSession,
-  cookieController.setSSIDCookie,
-  (req, res) => {
+  (_, res) => {
     // what should happen here on successful log in?
     console.log("completing post request to '/signup");
     // res.redirect('/secret');
