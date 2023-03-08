@@ -61,6 +61,14 @@ userController.verifyUser = async (req, res, next) => {
   }
 };
 
+// this is going to be coming from a patchrequest to add the board we juts created into the usersBoard that created it
+userController.addBoardIds = (req, res, next) => {
+  console.log('inside of userController.addBoardIds req.body:', req.body )
+  let { username } = req.body;
+
+
+}
+
 userController.getBoardIds = (req, res, next) => {
   console.log('running userController.getBoardIds. req.body: ', req.body)
   let { username } = req.body;
