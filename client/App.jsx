@@ -8,10 +8,10 @@ import HomePage from './components/HomePage.jsx';
 
 const App = () => {
 
-  const [ signUpToggle, setSignUpToggle ] = useState(false);
-  const [ user, setUser ] = useState(''); //<-- Switch to an empty string when ready
-  const [ password, setPassword ] = useState("")
-  const [ isLoggedIn, setLogin ] = useState(false); //<--- Switch to false when ready
+  const [signUpToggle, setSignUpToggle] = useState(false);
+  const [user, setUser] = useState(''); //<-- Switch to an empty string when ready
+  const [password, setPassword] = useState("")
+  const [isLoggedIn, setIsLoggedin] = useState(false); //<--- Switch to false when ready
   const [loginError, setLoginError] = useState(false);
 
 
@@ -22,40 +22,40 @@ const App = () => {
 
   useEffect(() => {
     if (loginError === true) alert('Incorrect username or password. Please try again');
-  },[loginError])
+  }, [loginError])
 
   return (
     <>
-      {isLoggedIn ? (<HomePage user={user} isLoggedIn={isLoggedIn} setLogin={setLogin}/>) :
-      (signUpToggle ? (
-        <SignUpPage
-        user={user}
-        setUser={setUser}
-        password={password}
-        setPassword={setPassword}
-        toggle={toggle}
-        isLoggedIn={isLoggedIn}
-        setLogin={setLogin}
-      />
-      ) : (
-        <LoginPage
-          user={user}
-          setUser={setUser}
-          password={password}
-          setPassword={setPassword}
-          toggle={toggle}
-          isLoggedIn={isLoggedIn}
-          setLogin={setLogin}
-          setLoginError={setLoginError}
-        />
-      )
-      )}
+      {isLoggedIn ? (<HomePage user={user} isLoggedIn={isLoggedIn} setLogin={setIsLoggedin} />) :
+        (signUpToggle ? (
+          <SignUpPage
+            user={user}
+            setUser={setUser}
+            password={password}
+            setPassword={setPassword}
+            toggle={toggle}
+            isLoggedIn={isLoggedIn}
+            setLogin={setIsLoggedin}
+          />
+        ) : (
+          <LoginPage
+            user={user}
+            setUser={setUser}
+            password={password}
+            setPassword={setPassword}
+            toggle={toggle}
+            isLoggedIn={isLoggedIn}
+            setLogin={setIsLoggedin}
+            setLoginError={setLoginError}
+          />
+        )
+        )}
       {/* {loginError ? (<div>Incorrect username or password. Please try again</div>) : <></>} */}
-      
+
     </>
   );
 }
- 
+
 export default App;
 
 /*notes on the routing:
