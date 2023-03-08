@@ -15,14 +15,14 @@ const SECRET = 'PpHbKAXUt6iC5Z80OWrGwKNVYQsOqdra';
 const THIRTY_SECONDS = 30 * 60;
 
 const mongoURI =
-  "mongodb+srv://shendo87:UIOqlCfrXxZJYeJL@cluster0.kzkmgom.mongodb.net/?retryWrites=true&w=majority";
+  "mongodb+srv://jjhuang3:codesmith123@cluster0.odachgf.mongodb.net/?retryWrites=true&w=majority";
 mongoose
   .connect(mongoURI, {
     // options for the connect method to parse the URI
     useNewUrlParser: true,
     useUnifiedTopology: true,
     // sets the name of the DB that our collections are part of
-    dbName: "scratch_project",
+    dbName: "tmnt",
   })
   .then(() => console.log("Connected to Mongo DB."))
   .catch((err) => console.log(err));
@@ -61,14 +61,20 @@ app.post('/api',
     res.status(200).json(res.locals.boards)
   })
 
+app.get('/boards/:board_id',
+  sessionController.isLoggedIn,
+  boardController.getBoard,
+  (req, res) => {
+    res.status(200).json(res.locals.board)
+  })
+
 app.post(
   "/login",
   userController.verifyUser,
   sessionController.startSession,
   (_, res) => {
     console.log("completing post request to '/login");
-    // TODO: This will need to send back board IDs for the front end
-    res.sendStatus(200);
+    res.status(200).json(res.locals.user);
   }
 );
 
@@ -79,8 +85,7 @@ app.post(
   (_, res) => {
     // what should happen here on successful log in?
     console.log("completing post request to '/signup");
-    // res.redirect('/secret');
-    res.redirect("/");
+    res.status(200).json(res.locals.user);
   }
 );
 

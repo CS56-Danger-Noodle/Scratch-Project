@@ -1,19 +1,21 @@
-import React, { Component } from "react";
+import React from "react";
 import { useState, useEffect } from "react";
-import  { ColumnModal, CardModal } from './Modals.jsx';
-import Column from './Column.jsx'
+import  { ColumnModal, CardModal } from '../components/Modals.jsx';
+import Column from '../components/Column.jsx';
+import {useParams} from 'react-router-dom';
+import axios from 'axios';
 
-function HomePage({user, isLoggedIn, setLogin}) {
+function BoardPage({user}) {
   // state to render a column creation modal
   const [ showColumnModal, setShowColumnModal ] = useState(false)
   // state to render a card creation modal
   const [ showCardModal, setShowCardModal ] = useState(false)
   // const [columnsState, setColumns] = useState(null);
-  const [ boardData, setBoardData ] = useState([]);
-  const [ currBoardID, setCurrBoardID] = useState('');
+  const [ boardData, setBoardData ] = useState(null);
+  const { board_id } = useParams();
 
-  //render columns and cards within 
-  // [
+  // boardData structure:
+  // 
   //   {
   //       "_id": "640635f9e846af21bdd5652e",
   //       "boardName": "testBoard",
@@ -30,31 +32,26 @@ function HomePage({user, isLoggedIn, setLogin}) {
   //           }
   //       ]
   //   }
-  // ]
+  // 
     //This is real code do not delete:
     let renderColumns = [];
 
     useEffect(() => {
+      const getBoard = async () => {
+        try {
+          const response = await axios.get(`/boards/${board_id}`);
+          setBoardData(response.data);
+        } catch (e) {
+          console.log('error in useEffect get board: ', e.message);
+        }
+      }
+      getBoard();
+    }, [])
 
-      fetch('/api', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({username: user})
-      }).then((res) => res.json())
-      .then((data) => {
-        setBoardData(data);
-        setCurrBoardID(data[0]._id)
-      })
-      .catch((error) => {
-        console.log('Error fetching boardData in APP.jsx:', error)
-      })
-    },[isLoggedIn])
+    // console.log('BOARD DATA', boardData)
 
-    console.log('BOARD DATA', boardData)
-
-
-    if (boardData.length !== 0) {
-      renderColumns = boardData[0].columns.map((column, index) => {
+    if (boardData) {
+      renderColumns = boardData.columns.map((column, index) => {
           return (<Column key={index} columnName={column.columnName} cards={column.cards} setShowCardModal={setShowCardModal}/>)
         })
     }
@@ -70,7 +67,7 @@ function HomePage({user, isLoggedIn, setLogin}) {
         
         <header className='homeHeader'>
           <h1> Home Page </h1>
-          <button className="logOut" onClick={() => (setLogin(false))}>LOG OUT</button>
+          <button className="logOut" onClick={() => (console.log('logging out'))}>LOG OUT</button>
 
         </header>
       
@@ -104,7 +101,6 @@ function HomePage({user, isLoggedIn, setLogin}) {
         </div>
       </div>
   );
-
 }
 
-export default HomePage;
+export default BoardPage;

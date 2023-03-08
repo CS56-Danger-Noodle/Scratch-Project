@@ -7,6 +7,21 @@ const Schema = mongoose.Schema;
 * After 30 seconds, the session will automatically be removed from the collection!
 * (actually, Mongo's cleanup service only runs once per minute so the session
 * could last up to 90 seconds before it's deleted, but still pretty cool!)
+
+BOARD {
+  boardName: { type: String, required: true, unique: true },
+  columns: [
+    {
+      columnName: { type: String, required: true, unique: true },
+      cards: [
+        {
+          cardText: { type: String, required: true, unique: true }
+        }
+      ]
+    }
+  ]
+}
+
 */
 const boardSchema = new Schema({
   boardName: { type: String, required: true, unique: true },
