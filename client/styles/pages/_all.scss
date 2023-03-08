@@ -1,3 +1,33 @@
 body {
+  padding-top: 80px;
   font-family: $mainFont;
+}
+
+.navbar {
+  display: flex;
+  height: 40px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.navlist {
+  display: flex;
+}
+
+.navlist li {
+  margin: 0 4px;
+}
+
+.navlist a:hover {
+  text-decoration: underline;
+}
+
+h1 {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+button:hover {
+  cursor: pointer;
 }

@@ -10,7 +10,7 @@ const cookieParser = require("cookie-parser");
 
 // setup app and port
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000; 
 
 const mongoURI =
   "mongodb+srv://jjhuang3:codesmith123@cluster0.odachgf.mongodb.net/?retryWrites=true&w=majority";
@@ -45,6 +45,13 @@ app.post('/api',
     res.status(200).json(res.locals.boards)
   })
 
+app.get('/boards/:board_id', 
+  sessionController.isLoggedIn,
+  boardController.getBoard, 
+  (req, res) => {
+    res.status(200).json(res.locals.board)
+})
+
 app.post(
   "/login",
   userController.verifyUser,
@@ -52,7 +59,7 @@ app.post(
   cookieController.setSSIDCookie,
   (_, res) => {
     console.log("completing post request to '/login");
-    res.sendStatus(200);
+    res.status(200).json(res.locals.user);
   }
 );
 
@@ -62,10 +69,8 @@ app.post(
   sessionController.startSession,
   cookieController.setSSIDCookie,
   (req, res) => {
-    // what should happen here on successful log in?
     console.log("completing post request to '/signup");
-    // res.redirect('/secret');
-    res.redirect("/");
+    res.status(200).json(res.locals.user);
   }
 );
 

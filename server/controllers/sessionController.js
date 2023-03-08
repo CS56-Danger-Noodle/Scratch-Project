@@ -54,7 +54,7 @@ sessionController.isLoggedIn = (req, res, next) => {
 sessionController.startSession = (req, res, next) => {
   console.log("running sessionController.startSession");
   console.log("user: ", res.locals.user);
-  Session.create({ cookieId: res.locals.user._id.toString() })
+  Session.create({ cookieId: res.locals.user.user_id.toString() })
     .then((data) => {
       console.log("created new session: ", data);
       return next();
