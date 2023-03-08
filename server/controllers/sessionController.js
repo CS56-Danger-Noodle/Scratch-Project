@@ -26,12 +26,11 @@ sessionController.startSession = (req, res, next) => {
       message: { err: "sessionController.startSession" + error },
     };
   }
-
   // Per docs: regenerate the session, which is good practice to help
   // guard against forms of session fixation
   req.session.regenerate(error => {
     if (error) return next(createErrorObject(error));
-    req.session.username = res.locals.username;
+    req.session.username = res.locals.user.username;
     req.session.save(error => {
       if (error) return next(createErrorObject(error));
       return next();
