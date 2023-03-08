@@ -1,18 +1,23 @@
 import React, { Component } from 'react';
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 
-function SignUpPage ({user, setUser, password, setPassword, toggle, isLoggedIn, setLogin}) {
+function SignUpPage ({toggle, isLoggedIn, setIsLoggedIn}) {
+
+  const navigate = useNavigate();
+  const [username, setUsername] = useState(''); //<-- Switch to an empty string when ready
+  const [password, setPassword] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const loginData = {username: user, password: password}
+    const loginData = {username: username, password: password}
     fetch('/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(loginData)
     }).then((res) => {
-      setLogin(true);
+      setIsLoggedIn(true);
       console.log('user created and logged in on signuppage.jsx')
     }). catch((error) => {
       console.log('unable to signup user', error)
@@ -28,16 +33,16 @@ function SignUpPage ({user, setUser, password, setPassword, toggle, isLoggedIn, 
           <form className='loginForm' onSubmit={handleSubmit}>
               <div className='formLine'>
                 <label className='login-text' htmlFor="username">Username/Email</label>
-                <input className='user-input' type='text' required onChange={(e) => setUser(e.target.value)}/>
+                <input className='user-input' type='text' value={username} required onChange={(e) => setUsername(e.target.value)}/>
               </div>
               <div className='formLine'>
                 <label className='login-text' htmlFor="password">Password</label>
-                <input className='user-input' type='password' required onChange={(e) => setPassword(e.target.value)}/>
+                <input className='user-input' type='password' value={password} required onChange={(e) => setPassword(e.target.value)}/>
               </div>
               <button className='submit' >Submit</button>
           </form>
               <div className='login-footer'>
-                  Already have an account? <button onClick={toggle}>Sign in here!</button>
+                  Already have an account? <button onClick={() => navigate('/login')}>Sign in here!</button>
               </div>
         {isLoggedIn && <HomePage />}
       </div>

@@ -10,7 +10,7 @@ const cookieParser = require("cookie-parser");
 
 // setup app and port
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000; 
 
 const mongoURI =
   "mongodb+srv://shendo87:UIOqlCfrXxZJYeJL@cluster0.kzkmgom.mongodb.net/?retryWrites=true&w=majority";
@@ -38,7 +38,7 @@ app.use("/build", express.static(path.resolve(__dirname, "../build")));
 
 // route handlers
 app.post('/api', 
-  sessionController.isLoggedIn,
+  // sessionController.isLoggedIn,
   userController.getBoardIds, 
   boardController.getBoards, 
   (req, res) => {
@@ -54,7 +54,8 @@ app.post(
     // what should happen here on successful log in?
     console.log("completing post request to '/login");
     // res.redirect('/secret');
-    res.sendStatus(200);
+    // res.sendStatus(200);
+    res.status(200).json(res.locals.user);
     // res.redirect("/");
   }
 );

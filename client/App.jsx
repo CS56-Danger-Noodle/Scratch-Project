@@ -1,57 +1,110 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import LoginPage from './components/LoginPage.jsx';
-import SignUpPage from './components/SignUpPage.jsx';
-import HomePage from './components/HomePage.jsx';
+import { BrowserRouter as Router, Routes, Route, Link} from "react-router-dom";
+import LoginPage from './pages/LoginPage.jsx';
+import SignUpPage from './pages/SignUpPage.jsx';
+import Navbar from './components/Navbar.jsx';
+import BoardsPage from './pages/BoardsPage.jsx';
+import BoardPage from './pages/BoardPage.jsx';
 
 
 const App = () => {
+  // const [ signUpToggle, setSignUpToggle ] = useState(false);
+  // const [ isLoggedIn, setIsLoggedIn ] = useState(false); //<--- Switch to false when ready
+  const [ loginError, setLoginError] = useState(false);
+  const [ user, setUser ] = useState(null); // refactor to add useEffect here that checks for user in session
+  
 
-  const [ signUpToggle, setSignUpToggle ] = useState(false);
-  const [ user, setUser ] = useState(''); //<-- Switch to an empty string when ready
-  const [ password, setPassword ] = useState("")
-  const [ isLoggedIn, setLogin ] = useState(false); //<--- Switch to false when ready
-  const [loginError, setLoginError] = useState(false);
 
-
-  //SIGN-UP / SIGN-IN TOGGLE
-  const toggle = () => {
-    setSignUpToggle(!signUpToggle);
-  }
+  // //SIGN-UP / SIGN-IN TOGGLE
+  // const toggle = () => {
+  //   setSignUpToggle(!signUpToggle);
+  // }
 
   useEffect(() => {
     if (loginError === true) alert('Incorrect username or password. Please try again');
-  },[loginError])
+  }, [loginError])
+
+  // return (
+  //   <>
+  //     {isLoggedIn ? (<HomePage user={user} isLoggedIn={isLoggedIn} setLogin={setLogin}/>) :
+  //     (signUpToggle ? (
+  //       <SignUpPage
+  //       user={user}
+  //       setUser={setUser}
+  //       password={password}
+  //       setPassword={setPassword}
+  //       toggle={toggle}
+  //       isLoggedIn={isLoggedIn}
+  //       setLogin={setLogin}
+  //     />
+  //     ) : (
+  //       <LoginPage
+  //         user={user}
+  //         setUser={setUser}
+  //         password={password}
+  //         setPassword={setPassword}
+  //         toggle={toggle}
+  //         isLoggedIn={isLoggedIn}
+  //         setLogin={setLogin}
+  //         setLoginError={setLoginError}
+  //       />
+  //     )
+  //     )}
+  //     {/* {loginError ? (<div>Incorrect username or password. Please try again</div>) : <></>} */}
+      
+  //   </>
+  // );
 
   return (
+    
     <>
-      {isLoggedIn ? (<HomePage user={user} isLoggedIn={isLoggedIn} setLogin={setLogin}/>) :
-      (signUpToggle ? (
-        <SignUpPage
-        user={user}
-        setUser={setUser}
-        password={password}
-        setPassword={setPassword}
-        toggle={toggle}
-        isLoggedIn={isLoggedIn}
-        setLogin={setLogin}
-      />
-      ) : (
-        <LoginPage
-          user={user}
-          setUser={setUser}
-          password={password}
-          setPassword={setPassword}
-          toggle={toggle}
-          isLoggedIn={isLoggedIn}
-          setLogin={setLogin}
-          setLoginError={setLoginError}
-        />
-      )
-      )}
-      {/* {loginError ? (<div>Incorrect username or password. Please try again</div>) : <></>} */}
-      
+    <Router>
+      <Navbar />
+        <Routes>
+        <Route path='/' element={<h1>Home</h1>} />
+          <Route 
+            path="/login" 
+            element={
+              <LoginPage
+                // toggle={toggle}
+                // isLoggedIn={isLoggedIn}
+                // setIsLoggedIn={setIsLoggedIn}
+                user={user}
+                setUser={setUser}
+              />
+            }
+          />
+          <Route 
+            path="/signup" 
+            element={
+              <SignUpPage
+                // toggle={toggle}
+                // isLoggedIn={isLoggedIn}
+                // setIsLoggedIn={setIsLoggedIn}
+                user={user}
+                setUser={setUser}
+              />
+            }
+          />
+          <Route 
+            path='/boards'      // '/boards/id'  ????  eventually '/boards' could list all boards and '/boards/id' would make request and serve a specific board
+            element={
+              <BoardPage
+                user={user}
+              />
+            } 
+          />
+          <Route 
+            path='/boards/id'
+            element={
+              <BoardPage 
+                user={user}
+              />
+            } 
+          />
+        </Routes>
+    </Router>
     </>
   );
 }
@@ -105,10 +158,17 @@ Routing:
       }
     />
     <Route 
-      path='/home' 
+      path='/boards'      // '/boards/id'  ????  eventually '/boards' could list all boards and '/boards/id' would make request and serve a specific board
       element={
-        <HomePage 
-        />} />
+        <BoardsPage
+        />
+      } 
+    />
+    <Route 
+      path='/boards/id'
+      element={
+        <BoardPage
+      }
   </Routes>
 </Router>
 

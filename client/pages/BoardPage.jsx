@@ -1,9 +1,9 @@
-import React, { Component } from "react";
+import React from "react";
 import { useState, useEffect } from "react";
-import  { ColumnModal, CardModal } from './Modals.jsx';
-import Column from './Column.jsx'
+import  { ColumnModal, CardModal } from '../components/Modals.jsx';
+import Column from '../components/Column.jsx';
 
-function HomePage({user, isLoggedIn, setLogin}) {
+function BoardPage({user}) {
   // state to render a column creation modal
   const [ showColumnModal, setShowColumnModal ] = useState(false)
   // state to render a card creation modal
@@ -35,20 +35,22 @@ function HomePage({user, isLoggedIn, setLogin}) {
     let renderColumns = [];
 
     useEffect(() => {
+      console.log('user is: ', user);
 
-      fetch('/api', {
+      fetch('/api', {                 // '/boards/:board_id`    req.params.id = board_id    
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({username: user})
       }).then((res) => res.json())
       .then((data) => {
+        console.log('DATA is: ', data);
         setBoardData(data);
         setCurrBoardID(data[0]._id)
       })
       .catch((error) => {
         console.log('Error fetching boardData in APP.jsx:', error)
       })
-    },[isLoggedIn])
+    }, [isLoggedIn])
 
     console.log('BOARD DATA', boardData)
 
@@ -70,7 +72,7 @@ function HomePage({user, isLoggedIn, setLogin}) {
         
         <header className='homeHeader'>
           <h1> Home Page </h1>
-          <button className="logOut" onClick={() => (setLogin(false))}>LOG OUT</button>
+          <button className="logOut" onClick={() => (setIsLoggedIn(false))}>LOG OUT</button>
 
         </header>
       
@@ -107,4 +109,4 @@ function HomePage({user, isLoggedIn, setLogin}) {
 
 }
 
-export default HomePage;
+export default BoardPage;
