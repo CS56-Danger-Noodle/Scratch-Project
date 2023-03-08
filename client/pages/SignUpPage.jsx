@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 // NOT TESTED, TEST OUT
 
-function SignUpPage ({toggle, isLoggedIn, setIsLoggedIn}) {
+function SignUpPage ({user, setUser}) {
 
   const navigate = useNavigate();
   const [username, setUsername] = useState(''); //<-- Switch to an empty string when ready
@@ -13,14 +13,18 @@ function SignUpPage ({toggle, isLoggedIn, setIsLoggedIn}) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const loginData = {username: username, password: password}
+    const loginData = {username, password}
     fetch('/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(loginData)
-    }).then((res) => {
-      setIsLoggedIn(true);
-      console.log('user created and logged in on signuppage.jsx')
+    })
+    .then(res => res.json())
+    .then((data) => {
+      setUser({user_id: data.user_id, username, board_ids: data.board_ids});
+      console.log('user successfully signed up: ', user);
+      console.log('data in sign up is: ', data);
+      navigate(`/boards/${data.board_ids[0]}`);
     }). catch((error) => {
       console.log('unable to signup user', error)
     })

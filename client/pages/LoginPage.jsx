@@ -20,7 +20,8 @@ function LoginPage ({user, setUser}) {
         })
         .then((res) => res.json())
         .then(data => {
-            const userData = { id: data._id, username, board_ids: data.board_ids};  // '640635f9e846af21bdd5652e'
+            console.log('in login, data is: ', data);
+            const userData = { user_id: data.user_id, username, board_ids: data.board_ids};  // '640635f9e846af21bdd5652e'
             setUser(userData); // expect a user object with id, username, board array
             // Eventually add this functionality to route to home page displaying all boards
             //navigate('/boards')   // user.board_ids   // getBoards from backend - boardNames and Id

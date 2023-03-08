@@ -46,8 +46,7 @@ app.post('/api',
   })
 
 app.get('/boards/:board_id', 
-  // sessionController.isLoggedIn,
-  // userController.getBoardIds, 
+  sessionController.isLoggedIn,
   boardController.getBoard, 
   (req, res) => {
     res.status(200).json(res.locals.board)
@@ -56,14 +55,11 @@ app.get('/boards/:board_id',
 app.post(
   "/login",
   userController.verifyUser,
-  // sessionController.startSession,
-  // cookieController.setSSIDCookie,
+  sessionController.startSession,
+  cookieController.setSSIDCookie,
   (_, res) => {
     console.log("completing post request to '/login");
-    // res.redirect('/secret');
-    // res.sendStatus(200);
     res.status(200).json(res.locals.user);
-    // res.redirect("/");
   }
 );
 
@@ -73,10 +69,8 @@ app.post(
   sessionController.startSession,
   cookieController.setSSIDCookie,
   (req, res) => {
-    // what should happen here on successful log in?
     console.log("completing post request to '/signup");
-    // res.redirect('/secret');
-    res.redirect("/");
+    res.status(200).json(res.locals.user);
   }
 );
 
