@@ -23,8 +23,9 @@ boardController.getBoard = (req, res, next) => {
   console.log('running boardController.getBoard. req.param: ', req.params)
   const { board_id } = req.params;
 
-  Board.findOne({_id: board_id })
+  Board.findById(board_id).exec()
     .then(response => {
+      console.log('response: ', response);
       res.locals.board = response;
       return next();
     })

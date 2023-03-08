@@ -40,16 +40,23 @@ userController.createUser = (req, res, next) => {
 userController.verifyUser = async (req, res, next) => {
   try {
     const { username, password } = req.body;
+    console.log('req.body: ', req.body);
     // ERROR HANDLING
     if (!username || !password) throw new Error('username and password must be provided');
 
     // check if req.body.username matches a username in the database
     const response = await User.findOne({ username: username }).exec();
+    console.log('response: ', response)
     if (!response) throw new Error(`User '${username}' not found`);
-    const isPasswordMatch = await response.comparePassword(password);
-    if (!isPasswordMatch) throw new Error(`Password does not match`);
-    res.locals.user = response;
-    return next();
+    // const isPasswordMatch = await response.comparePassword(password);
+    // console.log('isPWMatch: ', isPasswordMatch)
+    // if (!isPasswordMatch) throw new Error(`Password does not match`);
+    if (password === response.password) {
+      res.locals.user = {board_ids: response.board_ids, user_id: response._id};
+      return next();
+    } else {
+      throw new Error(`Password does not match`);
+    }
   } catch (error) {
     // Intentionally vague in the front end response for security purposes
     return next({

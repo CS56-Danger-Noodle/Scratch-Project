@@ -13,14 +13,14 @@ const app = express();
 const PORT = process.env.PORT || 3000; 
 
 const mongoURI =
-  "mongodb+srv://shendo87:UIOqlCfrXxZJYeJL@cluster0.kzkmgom.mongodb.net/?retryWrites=true&w=majority";
+  "mongodb+srv://jjhuang3:codesmith123@cluster0.odachgf.mongodb.net/?retryWrites=true&w=majority";
 mongoose
   .connect(mongoURI, {
     // options for the connect method to parse the URI
     useNewUrlParser: true,
     useUnifiedTopology: true,
     // sets the name of the DB that our collections are part of
-    dbName: "scratch_project",
+    dbName: "tmnt",
   })
   .then(() => console.log("Connected to Mongo DB."))
   .catch((err) => console.log(err));
@@ -56,8 +56,8 @@ app.get('/boards/:board_id',
 app.post(
   "/login",
   userController.verifyUser,
-  sessionController.startSession,
-  cookieController.setSSIDCookie,
+  // sessionController.startSession,
+  // cookieController.setSSIDCookie,
   (_, res) => {
     console.log("completing post request to '/login");
     // res.redirect('/secret');

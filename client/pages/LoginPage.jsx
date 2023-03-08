@@ -1,7 +1,6 @@
-import React, { Component } from 'react';
-import { useState, useEffect } from 'react';
-import HomePage from './BoardPage.jsx'
-import { Link, useNavigate } from "react-router-dom";
+import React from 'react';
+import { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 
 function LoginPage ({user, setUser}) {
 
@@ -13,7 +12,7 @@ function LoginPage ({user, setUser}) {
     // refactor this later
     const handleSubmit = (e) => {
         e.preventDefault();
-        const loginData = {username, password}
+        const loginData = {username, password};
         fetch('/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

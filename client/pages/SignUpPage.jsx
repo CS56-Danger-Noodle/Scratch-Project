@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { useState, useEffect } from 'react';
+import React from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -45,7 +45,6 @@ function SignUpPage ({toggle, isLoggedIn, setIsLoggedIn}) {
               <div className='login-footer'>
                   Already have an account? <button onClick={() => navigate('/login')}>Sign in here!</button>
               </div>
-        {isLoggedIn && <HomePage />}
       </div>
     </div>
   )
