@@ -3,6 +3,23 @@ const mongoose = require('mongoose');
 
 const boardController = {};
 
+
+boardController.createBoard = (req, res, next) => {
+  console.log('inside of boardController.createBoard. Req.body: ', req.body);
+  const { boardName, columnName, cardText } = req.body;
+  Board.create({boardName, columnName, cardText})
+    .then(data => {
+      res.locals.board = data;
+      next();
+    })
+    .catch(err => {
+      return next({
+        log: "error in boardController.createBoards",
+        message: { err: "boardController.createBoards" + err },
+      });
+    });
+};
+
 boardController.getBoards = (req, res, next) => {
   console.log('running boardController.getBoard. res.locals: ', res.locals)
   let { boardIds } = res.locals;
