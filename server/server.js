@@ -45,11 +45,19 @@ app.post('/api',
     res.status(200).json(res.locals.boards)
 })
 
+app.get('/boards/:board_id', 
+  // sessionController.isLoggedIn,
+  // userController.getBoardIds, 
+  boardController.getBoard, 
+  (req, res) => {
+    res.status(200).json(res.locals.board)
+})
+
 app.post(
   "/login",
   userController.verifyUser,
-  sessionController.startSession,
-  cookieController.setSSIDCookie,
+  // sessionController.startSession,
+  // cookieController.setSSIDCookie,
   (req, res) => {
     // what should happen here on successful log in?
     console.log("completing post request to '/login");

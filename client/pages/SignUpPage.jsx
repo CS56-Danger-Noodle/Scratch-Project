@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 
+// NOT TESTED, TEST OUT
+
 function SignUpPage ({toggle, isLoggedIn, setIsLoggedIn}) {
 
   const navigate = useNavigate();
@@ -24,7 +26,6 @@ function SignUpPage ({toggle, isLoggedIn, setIsLoggedIn}) {
     })
   }
   
-
   //RENDER
   return (
     <div className='loginCont'>

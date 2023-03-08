@@ -10,6 +10,7 @@ function LoginPage ({user, setUser}) {
     const [password, setPassword] = useState('');
 
     //HANDLE LOGIN
+    // refactor this later
     const handleSubmit = (e) => {
         e.preventDefault();
         const loginData = {username, password}
@@ -20,22 +21,12 @@ function LoginPage ({user, setUser}) {
         })
         .then((res) => res.json())
         .then(data => {
-
-            const userData = { id: 1, username: 'test', boards: ['640635f9e846af21bdd5652e']};  // '640635f9e846af21bdd5652e'
+            const userData = { id: data._id, username, board_ids: data.board_ids};  // '640635f9e846af21bdd5652e'
             setUser(userData); // expect a user object with id, username, board array
-            navigate('/boards/640635f9e846af21bdd5652e');
-            // if (res.status === 404) {
-            //     // setIsLoggedIn(false)
-            //     // setLoginError(true)
-            //     console.log("404 in handleSubmit");
-            // } else {
-            //     // setIsLoggedIn(true);   //isLoggedIn true -> useEffect -> fetch to /api for [{board1}]
-            //     // setLoginError(false);
-            //     // navigate to '/home'
-                
-            // }
-            console.log('logged in on LoginPage.jsx')
-            // console.log('users data', user)
+            // Eventually add this functionality to route to home page displaying all boards
+            //navigate('/boards')   // user.board_ids   // getBoards from backend - boardNames and Id
+            // for now we just directly go to the first board
+            navigate(`/boards/${userData.board_ids[0]}`);
         }).catch((error) => {
             console.log('incorrect username or password', error)
         }) 
@@ -60,7 +51,6 @@ function LoginPage ({user, setUser}) {
                         Don't have an Account? <button onClick={() => navigate('/signup')}>Sign up here!</button>
                     </div>
             </div>
-            {isLoggedIn && <HomePage />} 
         </div>
     )
 }
@@ -68,20 +58,3 @@ function LoginPage ({user, setUser}) {
 export default LoginPage;
 
 
-/* tried useContext()
-
-import UserProvider from '../UserContext';
-import UserContext from '../UserContext';
-
-    const user = useContext(UserProvider)
-    const password = useContext(UserProvider)
-    const signUpToggle = useContext(UserProvider)
-    const setSignUpToggle = useContext(UserProvider)
-    const [signUpToggle, setSignUpToggle] = useContext(UserContext)
-
-
-    function toggle () {
-        console.log(setSignUpToggle)
-        console.log('toggle: ', typeof setSignUpToggle)
-        setSignUpToggle(false)
-*/
