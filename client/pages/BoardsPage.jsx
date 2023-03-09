@@ -6,16 +6,16 @@ function BoardsPage({user}) {
 
   const [boardName, setBoardName] = useState('');
   const [boards, setBoards] = useState([]);
-
-  console.log('in boards page, user is: ', user);
+  const [loading, setLoading] = useState(true);
   const username = user.username;
+
   useEffect(() => {
     try {
       const getBoards = async () => {
         const response = await axios.get('/boards');
         const userBoards = response.data;
-        console.log('in useEffect boardsPage, userBoards is: ', userBoards);
         setBoards(userBoards);
+        setLoading(false);
       }
       getBoards();
     } catch (e) {
@@ -23,12 +23,11 @@ function BoardsPage({user}) {
     }
   }, []);
 
-  const createBoard = async (e) => {
+  const createBoard = async () => {
     try {
       const response = await axios.post('/boards', {boardName, username}, {withCredentials: true});
       const newBoard = response.data;
       setBoards(prevBoards => [...prevBoards, newBoard]);
-      console.log(' in create board, response is: ', response);
     } catch (e) {
       console.log('in createBoard, error is: ', e.message);
     }
@@ -37,30 +36,33 @@ function BoardsPage({user}) {
   const deleteBoard = async(board_id) => {
     try {
       const response = await axios.delete(`/boards/${board_id}`, { withCredentials: true });
-      console.log(' in delete board, response is: ', response);
       setBoards(prevBoards => prevBoards.filter(board => board._id !== board_id));
     } catch (e) {
       console.log('in deleteBoard, error is: ', e.message);
     }
   }
 
-  console.log('BOARDS IS: ', boards);
   const boardLinks = boards.map(board => (
     <li className="board-li">
-      <Link to={`/boards/${board._id}`} key={board._id} id={board._id}>{board.boardName}</Link>
-      <button onClick={() => deleteBoard(board._id)}>Delete</button>
+      <Link to={`/boards/${board._id}`} className="board-link" key={board._id} id={board._id}>{board.boardName}</Link>
+      <button className="delete-board-button" onClick={() => deleteBoard(board._id)}>Delete</button>
     </li>
   ));
 
   return (
-    <>
-      <h1>Boards Page</h1>
-      <ul className="boards-list">
-        {boardLinks.length > 0 && boardLinks}
-      </ul>
-      <input onChange={e => setBoardName(e.target.value)} value={boardName} placeholder="Board name"></input>
-      <button onClick={createBoard}>Create Board</button>
-    </>
+    <div className="boards-page-container">
+      <input className="create-board-input" onChange={e => setBoardName(e.target.value)} value={boardName} placeholder="Board name"></input>
+      <button className="create-board-button" onClick={createBoard}>Create Board</button>
+      <div className="boards-list-container">
+        <h1 className="boards-page-heading">
+          {!loading && (boards.length > 0 ? 'My Boards' : 'No Boards Currently')}
+        </h1>
+        <span className={`loader ${!loading && 'hidden'}`}></span>
+        <ul className="boards-list">
+          {boardLinks.length > 0 && boardLinks}
+        </ul>
+      </div>
+    </div>
   );
 }
 export default BoardsPage;
