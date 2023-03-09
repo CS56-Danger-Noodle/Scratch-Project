@@ -18,17 +18,38 @@ function SignUpPage({ user, setUser }) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(loginData)
     })
-    .then(res => res.json())
-    .then((data) => {
-      setUser({user_id: data.user_id, username, board_ids: data.board_ids});
-      console.log('user successfully signed up: ', user);
-      console.log('data in sign up is: ', data);
-      // navigate(`/boards/${data.board_ids[0]}`);
-      navigate(`/boards`);
-    }). catch((error) => {
+    .then(async (res) => {
+      const status = res.status;
+      const data = await res.json();
+      if (status === 200) {
+        setUser({ username, board_ids: data.board_ids });
+        navigate(`/boards/`);
+      } else if (status === 400 && data.err.includes('already exist')) {
+        alertRef.current.innerHTML = 'Username already exists.<br />Please select a different username.';
+        alertRef.current.style.visibility = 'visible';
+      } else {
+        alertRef.current.innerHTML = 'Unable to sign up. Please try again.';
+        alertRef.current.style.visibility = 'visible';
+      }
+    }).catch((error) => {
       console.log('unable to signup user', error)
     })
   }
+
+  const handleInputChange = ({ target }, callback) => {
+    callback(target.value);
+    if (alertRef.current.style.visibility === 'visible') alertRef.current.style.visibility = 'hidden';
+  }
+    // .then((data) => {
+    //   setUser({user_id: data.user_id, username, board_ids: data.board_ids});
+    //   console.log('user successfully signed up: ', user);
+    //   console.log('data in sign up is: ', data);
+    //   // navigate(`/boards/${data.board_ids[0]}`);
+    //   navigate(`/boards`);
+    // }). catch((error) => {
+    //   console.log('unable to signup user', error)
+    // })
+
 
   //RENDER
   return (
@@ -80,4 +101,4 @@ function toggle () {
   console.log(setSignUpToggle)
   return setSignUpToggle(false)
 
-*/ 
+*/
