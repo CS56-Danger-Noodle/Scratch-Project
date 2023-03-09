@@ -2,7 +2,7 @@ const path = require("path");
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const session = require('express-session');
+const session = require("express-session");
 const userController = require("./controllers/userController");
 const sessionController = require("./controllers/sessionController");
 const boardController = require("./controllers/boardController");
@@ -11,8 +11,8 @@ const boardController = require("./controllers/boardController");
 const app = express();
 const PORT = process.env.PORT || 3000;
 // Ideally this should be stored in a .env file or something similar
-const SECRET = 'PpHbKAXUt6iC5Z80OWrGwKNVYQsOqdra';
-const THIRTY_SECONDS = 30 * 60;
+const SECRET = "PpHbKAXUt6iC5Z80OWrGwKNVYQsOqdra";
+const ONE_DAY = 1000 * 60 * 60 * 24;
 
 const mongoURI =
   "mongodb+srv://jjhuang3:codesmith123@cluster0.odachgf.mongodb.net/?retryWrites=true&w=majority";
@@ -32,19 +32,21 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // By default, the session `store` instance defaults to a new `MemoryStore` instance
 // It is NOT intended to be used in production
-// If this application moves to production, a different store instance 
+// If this application moves to production, a different store instance
 // (e.g. MongoDB, redis) needs to be setup
-app.use(session({
-  secret: SECRET,
-  resave: false,
-  saveUninitialized: false,
-  name: 'sessionId',
-  cookie: {
-    secure: process.env.NODE_ENV === 'production',
-    maxAge: THIRTY_SECONDS
-  }
 
-}))
+app.use(
+  session({
+    secret: SECRET,
+    resave: true,
+    saveUninitialized: false,
+    name: "sessionId",
+    cookie: {
+      secure: process.env.NODE_ENV === "production",
+      maxAge: ONE_DAY,
+    },
+  })
+);
 
 // enable ALL CORS requests
 app.use(cors());
@@ -53,20 +55,44 @@ app.use(cors());
 app.use("/build", express.static(path.resolve(__dirname, "../build")));
 
 // route handlers
-app.post('/api',
+app.post(
+  "/api",
   sessionController.isLoggedIn,
   userController.getBoardIds,
   boardController.getBoards,
-  (_, res) => {
-    res.status(200).json(res.locals.boards)
-  })
 
-app.get('/boards/:board_id',
+  (_, res) => {
+    res.status(200).json(res.locals.boards);
+  }
+);
+
+app.get(
+  "/boards",
+  sessionController.isLoggedIn,
+  boardController.getBoards,
+  (req, res) => {
+    res.status(200).json(res.locals.boards);
+  }
+);
+app.get(
+  "/boards/:board_id",
   sessionController.isLoggedIn,
   boardController.getBoard,
   (req, res) => {
-    res.status(200).json(res.locals.board)
-  })
+    res.status(200).json(res.locals.board);
+  }
+);
+
+// the request body you'll receive is {username: username}
+app.post(
+  "/boards",
+  sessionController.isLoggedIn,
+  boardController.createBoard,
+  userController.addBoardId,
+  (req, res) => {
+    res.status(200).json(res.locals.board);
+  }
+);
 
 app.post(
   "/login",
