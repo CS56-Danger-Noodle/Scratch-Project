@@ -11,13 +11,14 @@ function BoardsPage({user}) {
     // here's where we want to get all boards from db
     // axios.get();
   }, []);
-  
+
   const createBoard = async (e) => {
     try {
       const response = await axios.post('/boards', {boardName, username}, {withCredentials: true});
+      console.log(' in create board, response is: ', response);
     } catch (e) {
       console.log('in createBoard, error is: ', e.message);
-    } 
+    }
   }
 
   return (

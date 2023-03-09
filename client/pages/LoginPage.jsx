@@ -16,21 +16,28 @@ function LoginPage({ user, setUser }) {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(loginData)
-        })
-        .then((res) => res.json())
-        .then(data => {
+        }).then(async (res) => {
+            const status = res.status;
+            const data = await res.json();
+            const userData = { username, board_ids: data.board_ids };
+            setUser(userData);
             console.log('in login, data is: ', data);
-            const userData = { user_id: data.user_id, username, board_ids: data.board_ids};  // '640635f9e846af21bdd5652e'
-            setUser(userData); // expect a user object with id, username, board array
-            // Eventually add this functionality to route to home page displaying all boards
-            //navigate('/boards')   // user.board_ids   // getBoards from backend - boardNames and Id
-            // for now we just directly go to the first board
-            // navigate(`/boards/${userData.board_ids[0]}`);
-            navigate(`/boards`);
+            if (status === 200) {
+                setUser(data);
+                navigate(`/boards`);
+            } else {
+                alertRef.current.style.visibility = 'visible';
+            }
         }).catch((error) => {
-            console.log('incorrect username or password: ', error.message)
-        }) 
+            console.log('incorrect username or password', error)
+        })
     }
+
+    const handleInputChange = ({ target }, callback) => {
+        callback(target.value);
+        if (alertRef.current.style.visibility === 'visible') alertRef.current.style.visibility = 'hidden';
+    }
+
     //RENDER
     return (
         <div className='loginCont'>
