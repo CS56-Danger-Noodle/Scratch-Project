@@ -19,8 +19,6 @@ function LoginPage({ user, setUser }) {
         }).then(async (res) => {
             const status = res.status;
             const data = await res.json();
-            const userData = { username, board_ids: data.board_ids };
-            setUser(userData);
             console.log('in login, data is: ', data);
             if (status === 200) {
                 setUser(data);
