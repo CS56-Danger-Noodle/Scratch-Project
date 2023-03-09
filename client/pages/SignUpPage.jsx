@@ -1,19 +1,18 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 
-// NOT TESTED, TEST OUT
 
-function SignUpPage ({user, setUser}) {
+function SignUpPage({ user, setUser }) {
 
   const navigate = useNavigate();
   const [username, setUsername] = useState(''); //<-- Switch to an empty string when ready
   const [password, setPassword] = useState('');
+  const alertRef = useRef();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const loginData = {username, password}
+    const loginData = { username, password }
     fetch('/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -30,31 +29,35 @@ function SignUpPage ({user, setUser}) {
       console.log('unable to signup user', error)
     })
   }
-  
+
   //RENDER
   return (
     <div className='loginCont'>
       <div className="user-login-box">
+        <header>
           <h1 className='login-header'>Create a new Account:</h1>
-          <form className='loginForm' onSubmit={handleSubmit}>
-              <div className='formLine'>
-                <label className='login-text' htmlFor="username">Username/Email</label>
-                <input className='user-input' type='text' value={username} required onChange={(e) => setUsername(e.target.value)}/>
-              </div>
-              <div className='formLine'>
-                <label className='login-text' htmlFor="password">Password</label>
-                <input className='user-input' type='password' value={password} required onChange={(e) => setPassword(e.target.value)}/>
-              </div>
-              <button className='submit' >Submit</button>
-          </form>
-              <div className='login-footer'>
-                  Already have an account? <button onClick={() => navigate('/login')}>Sign in here!</button>
-              </div>
+          <span id='login-alert' ref={alertRef}></span>
+        </header>
+        <form className='loginForm' onSubmit={handleSubmit}>
+          <div className='formLine'>
+            <label className='login-text' htmlFor="username">Username/Email</label>
+            <input className='user-input' type='text' value={username} required onChange={(e) => handleInputChange(e, setUsername)} />
+          </div>
+          <div className='formLine'>
+            <label className='login-text' htmlFor="password">Password</label>
+            <input className='user-input' type='password' value={password} required onChange={(e) => handleInputChange(e, setPassword)} />
+          </div>
+          <button className='submit' >Submit</button>
+        </form>
+        <div className='login-footer'>
+          <span>Don't have an Account?</span>
+          <button onClick={() => navigate('/login')}>Sign in here!</button>
+        </div>
       </div>
     </div>
   )
 }
- 
+
 export default SignUpPage;
 
 

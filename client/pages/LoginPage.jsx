@@ -1,18 +1,17 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from "react-router-dom";
 
-function LoginPage ({user, setUser}) {
-
+function LoginPage({ user, setUser }) {
     const navigate = useNavigate();
     const [username, setUsername] = useState(''); //<-- Switch to an empty string when ready
     const [password, setPassword] = useState('');
+    const alertRef = useRef();
 
     //HANDLE LOGIN
     // refactor this later
     const handleSubmit = (e) => {
         e.preventDefault();
-        const loginData = {username, password};
+        const loginData = { username, password };
         fetch('/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -36,26 +35,30 @@ function LoginPage ({user, setUser}) {
     return (
         <div className='loginCont'>
             <div className="user-login-box">
-                <h1 className='login-header'>Welcome! Sign in here! </h1>
+                <header>
+                    <h1 className='login-header'>Welcome! Sign in here! </h1>
+                    <span id='login-alert' ref={alertRef}>Incorrect username and/or password.</span>
+                </header>
                 <form className='loginForm' onSubmit={handleSubmit}>
                     <div className='formLine'>
                         <label className='login-text' htmlFor="username">Username/Email</label>
-                        <input className='user-input' type='text' required value={username} onChange={(e) => setUsername(e.target.value)}/>
+                        <input className='user-input' type='text' required value={username} onChange={(e) => handleInputChange(e, setUsername)} />
                     </div>
                     <div className='formLine'>
                         <label className='login-text' htmlFor="password">Password</label>
-                        <input className='user-input' type='password' value={password} required onChange={(e) => setPassword(e.target.value)}/>
+                        <input className='user-input' type='password' value={password} required onChange={(e) => handleInputChange(e, setPassword)} />
                     </div>
                     <button className='submit'>Login</button>
                 </form>
-                    <div className='login-footer'>
-                        Don't have an Account? <button onClick={() => navigate('/signup')}>Sign up here!</button>
-                    </div>
+                <div className='login-footer'>
+                    <span>Don't have an Account?</span>
+                    <button onClick={() => navigate('/signup')}>Sign up here!</button>
+                </div>
             </div>
         </div>
     )
 }
- 
+
 export default LoginPage;
 
 
