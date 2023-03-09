@@ -2,10 +2,10 @@ import React from "react";
 import { useState, useEffect } from "react";
 import  { ColumnModal, CardModal } from '../components/Modals.jsx';
 import Column from '../components/Column.jsx';
-import {useParams} from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-function BoardPage({user}) {
+function BoardPage({user, setUser}) {
   // state to render a column creation modal
   const [ showColumnModal, setShowColumnModal ] = useState(false)
   // state to render a card creation modal
@@ -47,6 +47,21 @@ function BoardPage({user}) {
       }
       getBoard();
     }, [])
+
+    const navigate = useNavigate();
+
+    async function logout() {
+      try {
+        // make DB call to terminate session
+        await axios.delete('/logout');
+        // clear userState
+        setUser(null);
+        // navigate to login page
+        navigate('/login');
+      } catch(err) {
+        console.log('error in BoardPage.jsx logout function: ', err.message)
+      }
+    }
 
     // console.log('BOARD DATA', boardData)
 
