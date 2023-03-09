@@ -51,22 +51,9 @@ function BoardPage({user, setUser}) {
     const navigate = useNavigate();
 
     async function logout() {
-      // CREATE SESSION - expected response: cookie and username
       try {
-        console.log('testing sessionCreate.  expect the response cookie and username test')
-        // make DB call to terminate user
-        const sessionCreateResponse = await axios.get('/sessionTest');
-        console.log('sessionCreateResponse: ', sessionCreateResponse.data)
-      } catch(err) {
-        console.log('error in BoardPage.jsx logout function: ', err.message)
-      }
-
-      // TERMINATE SESSION - expected response: cookie and no username (null)
-      try {
-        console.log('testing terminateSession.  expect response cookie with no username')
-        // make DB call to terminate user
-        const logoutResponse = await axios.get('/logout');
-        console.log('logoutResponse: ', logoutResponse.data)
+        // make DB call to terminate session
+        const logoutResponse = await axios.delete('/logout');
         // clear userState
         setUser(null);
         // navigate to login page

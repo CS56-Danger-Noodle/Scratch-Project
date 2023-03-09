@@ -89,11 +89,11 @@ app.post(
   }
 );
 
-app.get(
+app.delete(
   "/logout",
   sessionController.terminateSession,
   (req, res) => {
-    console.log("completing get request to '/logout");
+    console.log("completing delete request to '/logout");
     res.status(200).json(req.session);
   }
 )
