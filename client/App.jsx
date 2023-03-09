@@ -47,6 +47,7 @@ const App = () => {
             element={
               <BoardsPage
                 user={user}
+                setUser={setUser}
               />
             } 
           />
