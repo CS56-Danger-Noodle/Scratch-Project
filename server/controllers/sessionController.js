@@ -42,7 +42,7 @@ sessionController.startSession = (req, res, next) => {
 sessionController.terminateSession = (req, res, next) => {
   console.log("running sessionController.terminateSession");
   console.log('req.session.username: ', req.session.username);
-  
+
   const createErrorObject = (error) => {
     return {
       log: "error in sessionController.terminateSession",
@@ -51,7 +51,7 @@ sessionController.terminateSession = (req, res, next) => {
   }
 
   // destroy session and move on to next middleware
-  req.session.destroy();
+  req.session.destroy(e => console.log('error: ', e.message));
   return next();
 };
 
