@@ -1,7 +1,6 @@
-
 .loginCont {
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - 80px);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -21,7 +20,9 @@
   align-items: center;
   padding: 40px;
   gap: 30px;
-};
+}
+
+;
 
 .login-header {
   color: $color1;
@@ -53,4 +54,3 @@
   background-color: $color2;
   border-radius: 5px;
 }
-

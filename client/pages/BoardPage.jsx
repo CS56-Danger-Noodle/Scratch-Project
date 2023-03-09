@@ -64,12 +64,6 @@ function BoardPage({user}) {
       <div className='homeCont'>
 
         {overlay}
-        
-        <header className='homeHeader'>
-          <h1> Home Page </h1>
-          <button className="logOut" onClick={() => (console.log('logging out'))}>LOG OUT</button>
-
-        </header>
       
         <div className='boardDisplay'>
           <div className="modal-box">

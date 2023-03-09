@@ -1,17 +1,21 @@
 import React from "react";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
-function Navbar (props) {
+function Navbar ({ user }) {
   return (
-    <nav className="navbar">
-      <ul className="navlist">
-        {/* <NavLink to='/signup'>SignUp</NavLink> */}
-        <li><Link to="/login">Login</Link></li>
-        <li><Link to="/signup">Sign up</Link></li>
-        <li><Link to="/boards">Boards</Link></li>
-        <li><Link to="/">Home</Link></li>
-      </ul>
-    </nav>
+    <div className="navbarContainer">
+      <nav className="navbar">
+        <ul className="navlist">
+          {/* <NavLink to='/signup'>SignUp</NavLink> */}
+          {!user && <li><NavLink to="/login">Login</NavLink></li>}
+          {!user && <li><NavLink to="/signup">Sign up</NavLink></li>}
+          {user && <li><NavLink to="/boards">Boards '/boards'</NavLink></li>}
+          {user && <li><NavLink to="/">Home '/'</NavLink></li>}
+        </ul>
+        {user && <h1 className="navbarTitle">welcome {user.username}</h1>}
+        {user && <button className="logOut" onClick={() => (console.log('logging out user: ', user))}>LOG OUT</button>}
+      </nav>
+    </div>
   );
 }
 export default Navbar;

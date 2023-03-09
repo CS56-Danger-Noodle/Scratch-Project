@@ -21,7 +21,9 @@ const App = () => {
     
     <>
     <Router>
-      <Navbar />
+      <Navbar 
+        user={user}
+      />
         <Routes>
         <Route path='/' element={<h1>Home</h1>} />
           <Route 
