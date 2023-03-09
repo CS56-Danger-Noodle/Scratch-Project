@@ -115,10 +115,22 @@ app.post(
   }
 );
 
-app.use("/sessionTest", sessionController.isLoggedIn, (req, res) => {
-  console.log("user isLoggedIn successfully.  Returning status 418");
-  res.sendStatus(418);
-});
+app.delete(
+  "/logout",
+  sessionController.terminateSession,
+  (req, res) => {
+    console.log("completing delete request to '/logout");
+    res.sendStatus(200);
+  }
+)
+
+app.use('/sessionTest',
+  // sessionController.startSession,
+  sessionController.isLoggedIn,
+  (req, res) => {
+    console.log("completing request to '/sessionTest");
+    res.sendStatus(200);
+  })
 
 app.use("/api", sessionController.isLoggedIn, (req, res) => {
   console.log('completing request to "/api"');

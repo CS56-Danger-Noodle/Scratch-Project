@@ -36,4 +36,23 @@ sessionController.startSession = (req, res, next) => {
   });
 };
 
+/**
+ * terminateSession - clear username from Session object and save.
+ */
+sessionController.terminateSession = (req, res, next) => {
+  console.log("running sessionController.terminateSession");
+  console.log('req.session.username: ', req.session.username);
+  
+  const createErrorObject = (error) => {
+    return {
+      log: "error in sessionController.terminateSession",
+      message: { err: "sessionController.terminateSession" + error },
+    };
+  }
+
+  // destroy session and move on to next middleware
+  req.session.destroy();
+  return next();
+};
+
 module.exports = sessionController;
