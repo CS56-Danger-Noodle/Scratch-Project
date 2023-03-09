@@ -30,7 +30,7 @@ function Navbar ({ user, setUser }) {
           {user && <li><NavLink to="/boards">My Boards</NavLink></li>}
           {user && <li><NavLink to={`/boards/${user.board_ids[0]}`}>Boardpage</NavLink></li>}
         </ul>
-        {user && <h1 className="navbarTitle">welcome {user.username}</h1>}
+        {user && <h1 className="navbarTitle">Welcome, {user.username}</h1>}
         {user && <button className="logOut" onClick={logout}>LOG OUT</button>}
       </nav>
     </div>

@@ -43,7 +43,7 @@ sessionController.terminateSession = (req, res, next) => {
   console.log("running sessionController.terminateSession");
   // console.log('req.session.username: ', req.session.username);
   console.log('req.session:', req.session);
-  
+
   const createErrorObject = (error) => {
     return {
       log: "error in sessionController.terminateSession",
@@ -54,7 +54,7 @@ sessionController.terminateSession = (req, res, next) => {
   // remove sessionID cookie on client side
 
 
-  
+
   // destroy session
   console.log('destroying session')
   req.session.destroy((error) => {
