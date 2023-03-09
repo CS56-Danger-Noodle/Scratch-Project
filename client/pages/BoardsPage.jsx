@@ -1,8 +1,8 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import { Link } from "react-router-dom";
 
-function BoardsPage({user}) {
+function BoardsPage({ user }) {
 
   const [boardName, setBoardName] = useState('');
   const [boards, setBoards] = useState([]);
@@ -25,7 +25,7 @@ function BoardsPage({user}) {
 
   const createBoard = async () => {
     try {
-      const response = await axios.post('/boards', {boardName, username}, {withCredentials: true});
+      const response = await axios.post('/boards', { boardName, username }, { withCredentials: true });
       const newBoard = response.data;
       setBoards(prevBoards => [...prevBoards, newBoard]);
     } catch (e) {
@@ -33,7 +33,7 @@ function BoardsPage({user}) {
     }
   }
 
-  const deleteBoard = async(board_id) => {
+  const deleteBoard = async (board_id) => {
     try {
       const response = await axios.delete(`/boards/${board_id}`, { withCredentials: true });
       setBoards(prevBoards => prevBoards.filter(board => board._id !== board_id));
@@ -43,8 +43,8 @@ function BoardsPage({user}) {
   }
 
   const boardLinks = boards.map(board => (
-    <li className="board-li">
-      <Link to={`/boards/${board._id}`} className="board-link" key={board._id} id={board._id}>{board.boardName}</Link>
+    <li className="board-li" key={board._id}>
+      <Link to={`/boards/${board._id}`} className="board-link" id={board._id}>{board.boardName}</Link>
       <button className="delete-board-button" onClick={() => deleteBoard(board._id)}>Delete</button>
     </li>
   ));
