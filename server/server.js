@@ -94,7 +94,7 @@ app.delete(
   sessionController.terminateSession,
   (req, res) => {
     console.log("completing delete request to '/logout");
-    res.status(200).json(req.session);
+    res.sendStatus(200);
   }
 )
 
@@ -103,7 +103,7 @@ app.use('/sessionTest',
   sessionController.isLoggedIn,
   (req, res) => {
     console.log("completing request to '/sessionTest");
-    res.status(200).json(req.session);
+    res.sendStatus(200);
   })
 
 app.use("/api", sessionController.isLoggedIn, (req, res) => {

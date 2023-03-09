@@ -33,13 +33,11 @@ module.exports = {
       publicPath: "/",
     },
     port: 8080,
-    proxy: {
-      "/api": "http://localhost:3000/",
-      "/login": "http://localhost:3000/",
-      "/logout": "http://localhost:3000/",
-      "/signup": "http://localhost:3000/",
-      "/boards": "http://localhost:3000/",
-      "/sessionTest": "http://localhost:3000/",
-    },
+    proxy: [
+      {
+        context: ['/api', '/login', '/logout', '/signup', '/boards', '/sessionTest'],
+        target: 'http://localhost:3000',
+      }
+    ]
   },
 };

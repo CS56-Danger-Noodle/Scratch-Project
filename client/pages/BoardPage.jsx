@@ -53,7 +53,7 @@ function BoardPage({user, setUser}) {
     async function logout() {
       try {
         // make DB call to terminate session
-        const logoutResponse = await axios.delete('/logout');
+        await axios.delete('/logout');
         // clear userState
         setUser(null);
         // navigate to login page
