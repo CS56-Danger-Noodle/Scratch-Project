@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from "react-router-dom";
 import LoginPage from './pages/LoginPage.jsx';
 import SignUpPage from './pages/SignUpPage.jsx';
 import Navbar from './components/Navbar.jsx';
@@ -55,6 +55,7 @@ const App = () => {
             element={
               <BoardPage 
                 user={user}
+                setUser={setUser}
               />
             } 
           />
