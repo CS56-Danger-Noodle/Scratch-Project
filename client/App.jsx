@@ -23,9 +23,22 @@ const App = () => {
     <Router>
       <Navbar 
         user={user}
+        setUser={setUser}
       />
         <Routes>
-        <Route path='/' element={<h1>Home</h1>} />
+          <Route 
+            path='/' 
+            element={
+              user ?
+              <BoardsPage
+              user={user}
+              /> :
+              <LoginPage
+                user={user}
+                setUser={setUser}
+              />
+            } 
+          />
           <Route 
             path="/login" 
             element={
@@ -47,8 +60,13 @@ const App = () => {
           <Route 
             path='/boards'
             element={
+              user ?
               <BoardsPage
                 user={user}
+              /> :
+              <LoginPage
+                user={user}
+                setUser={setUser}
               />
             } 
           />
@@ -68,12 +86,3 @@ const App = () => {
 }
  
 export default App;
-
-/*notes on the routing:
-//the first Route has a path of "/" (which maybe should change?)
-// and it renders the Login Page
-//the next Routes are nested in that first Route
-
-// do we need to add a catchall for undefined URLs, like <Route path="*" element={<NoPage />} />
-// & then import a NoPage & have an error msg?
-*/

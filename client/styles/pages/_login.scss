@@ -53,4 +53,12 @@
   border: 1px $color1 solid;
   background-color: $color2;
   border-radius: 5px;
+  margin: 1px;
+  margin-top: 4px;
+  padding: 2px 10px;
+
+  &:focus {
+    outline: 2px $color1 solid;
+  }
+
 }
