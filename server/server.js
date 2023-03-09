@@ -7,6 +7,8 @@ const userController = require("./controllers/userController");
 const sessionController = require("./controllers/sessionController");
 const boardController = require("./controllers/boardController");
 
+const loginRouter = require('./router/loginRouter');
+
 // setup app and port
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -103,15 +105,7 @@ app.post(
   }
 );
 
-app.post(
-  "/login",
-  userController.verifyUser,
-  sessionController.startSession,
-  (_, res) => {
-    console.log("completing post request to '/login");
-    res.status(200).json(res.locals.user);
-  }
-);
+app.use("/login", loginRouter);
 
 app.post(
   "/signup",
