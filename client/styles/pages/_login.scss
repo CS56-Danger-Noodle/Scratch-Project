@@ -1,6 +1,6 @@
 .loginCont {
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - 80px);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -25,20 +25,22 @@ header {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 40px;
+  gap: 30px;
+}
 
-  .login-header {
-    color: $color1;
-    font-size: 30px;
-    font-weight: 900;
-  }
+.login-header {
+  color: $color1;
+  font-size: 30px;
+  font-weight: 900;
+}
 
-  #login-alert {
-    color: $color6;
-    margin-top: 0.8rem;
-    visibility: hidden;
-    font-size: 0.95rem;
-    text-align: center;
-  }
+#login-alert {
+  color: $color6;
+  margin-top: 0.8rem;
+  visibility: hidden;
+  font-size: 0.95rem;
+  text-align: center;
 }
 
 .loginForm {
@@ -65,13 +67,20 @@ header {
   border: 1px $color1 solid;
   background-color: $color2;
   border-radius: 5px;
-}
+  margin: 1px;
+  margin-top: 4px;
+  padding: 2px 10px;
 
-.login-footer {
-  display: inline-block;
+  &:focus {
+    outline: 2px $color1 solid;
+  }
 
-  span {
-    vertical-align: middle;
-    margin-right: 0.8rem;
+  .login-footer {
+    display: inline-block;
+
+    span {
+      vertical-align: middle;
+      margin-right: 0.8rem;
+    }
   }
 }
