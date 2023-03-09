@@ -68,8 +68,8 @@ userController.verifyUser = async (req, res, next) => {
   userController.addBoardId = (req, res, next) => {
   const { username } = req.body;
   const board_id = res.locals.board._id;
-  User.findOneAndUpdate({username: username},  
-    {$push: { board_ids: board_id }}, 
+  User.findOneAndUpdate({username: username},
+    {$push: { board_ids: board_id }},
     {new: true}).exec()
       .then(data => {
         next();
