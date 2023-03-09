@@ -72,7 +72,6 @@ userController.verifyUser = async (req, res, next) => {
     {$push: { board_ids: board_id }}, 
     {new: true}).exec()
       .then(data => {
-        res.locals.user = data; //not using this at the moment
         next();
       })
       .catch(err => {
