@@ -37,19 +37,6 @@ function LoginPage({ user, setUser }) {
         callback(target.value);
         if (alertRef.current.style.visibility === 'visible') alertRef.current.style.visibility = 'hidden';
     }
-        // .then((res) => res.json())
-        // .then(data => {
-        //     console.log('in login, data is: ', data);
-        //     const userData = { user_id: data.user_id, username, board_ids: data.board_ids};  // '640635f9e846af21bdd5652e'
-        //     setUser(userData); // expect a user object with id, username, board array
-        //     // Eventually add this functionality to route to home page displaying all boards
-        //     //navigate('/boards')   // user.board_ids   // getBoards from backend - boardNames and Id
-        //     // for now we just directly go to the first board
-        //     // navigate(`/boards/${userData.board_ids[0]}`);
-        //     navigate(`/boards`);
-        // }).catch((error) => {
-        //     console.log('incorrect username or password: ', error.message)
-        // })
 
     //RENDER
     return (

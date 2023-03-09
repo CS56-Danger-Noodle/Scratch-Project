@@ -40,16 +40,6 @@ function SignUpPage({ user, setUser }) {
     callback(target.value);
     if (alertRef.current.style.visibility === 'visible') alertRef.current.style.visibility = 'hidden';
   }
-    // .then((data) => {
-    //   setUser({user_id: data.user_id, username, board_ids: data.board_ids});
-    //   console.log('user successfully signed up: ', user);
-    //   console.log('data in sign up is: ', data);
-    //   // navigate(`/boards/${data.board_ids[0]}`);
-    //   navigate(`/boards`);
-    // }). catch((error) => {
-    //   console.log('unable to signup user', error)
-    // })
-
 
   //RENDER
   return (
@@ -80,25 +70,3 @@ function SignUpPage({ user, setUser }) {
 }
 
 export default SignUpPage;
-
-
-
-
-/* tried useContext ...
-
-import UserProvider from '../UserContext';
-import UserContext from '../UserContext';
-STATE HERE IF NEEDED
-const user = useContext(UserProvider)
-const password = useContext(UserProvider)
-// const signUpToggle = useContext(UserProvider)
-// const setSignUpToggle = useContext(UserProvider)
-const [signUpToggle, setSignUpToggle] = useContext(UserContext)
-
-
-function toggle () {
-  console.log('toggle: ', typeof setSignUpToggle)
-  console.log(setSignUpToggle)
-  return setSignUpToggle(false)
-
-*/
