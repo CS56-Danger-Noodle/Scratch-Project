@@ -1,8 +1,7 @@
 const User = require("../models/userModel");
-const path = require("path");
-const mongoose = require('mongoose');
 const { GOOGLE_AUTH_CLIENT_ID } = require('../../config-default');
 const jwt_decode = require('jwt-decode');
+const createErrorObject = require('./controllerHelper');
 
 const userController = {};
 
@@ -29,10 +28,9 @@ const createUserInDb = (username, password, res, next) => {
           message: { err: 'username already exists' },
         })
       }
-      return next({
-        log: err,
-        message: { err: "`createUserInDb` in userController.js: " + err },
-      });
+      return next(
+        createErrorObject(err, "`createUserInDb` in userController.js")
+      );
     });
 };
 
@@ -41,7 +39,7 @@ userController.createUser = (req, res, next) => {
   const { username, password } = req.body;
   if (!username || !password) {
     return next({
-      log: "userController.createUser",
+      log: `Missing username and/or password. Username: '${username}'; Password: '${password}`,
       message: { err: "userController.createUser: username and password must be provided" },
     });
   }
@@ -61,15 +59,14 @@ userController.verifyUser = async (req, res, next) => {
     console.log('response: ', response)
     if (!response) throw new Error(`User '${username}' not found`);
     const isPasswordMatch = await response.comparePassword(password);
-    if (!isPasswordMatch) throw new Error(`Password does not match`);
+    if (!isPasswordMatch) throw new Error('Password does not match');
     res.locals.user = { username, board_ids: response.board_ids };
     return next();
   } catch (error) {
     // Intentionally vague in the front end response for security purposes
-    return next({
-      log: error,
-      message: { err: "Error occurred in userController.verifyUser" },
-    });
+    return next(
+      createErrorObject(error, 'userController.verifyUser')
+    );
   }
 };
 
@@ -97,12 +94,21 @@ userController.verifyUserOauth = async (req, res, next) => {
   // Although mongoose's `findOneAndupdate` allows upsert
   // It does not have the ability to perform password hashing easily
   // So we will check if a user is exist in a separate query before inserting
-  const response = await User.findOne({ username: email });
-  if (response) {
-    setUserObject(response, res);
-    return next();
-  }
+  try {
+    const response = await User.findOne({ username: email });
+    if (response) {
+      setUserObject(response, res);
+      return next();
+    }
+  } catch (error) {
+    return next({
+      log: error,
+      message: { err: userFacingErrorMessage },
+    });
+  };
+
   createUserInDb(email, DUMMY_PASSWORD_FOR_OAUTH, res, next);
+
 }
 
 // this is going to be coming from a patchrequest to add the board we juts created into the usersBoard that created it
@@ -119,10 +125,9 @@ userController.addBoardId = (req, res, next) => {
       next();
     })
     .catch(err => {
-      return next({
-        log: "error in userController.addBoardId",
-        message: { err: "userController.addBoardId" + err },
-      });
+      return next(
+        createErrorObject(err, 'userController.addBoardId')
+      );
     });
 };
 
@@ -133,10 +138,9 @@ userController.removeBoardId = async (req, res, next) => {
     await User.findOneAndUpdate({ username: username }, { $pull: { board_ids: board_id } }, { new: true });
     return next();
   } catch (e) {
-    return next({
-      log: "error in userController.removeBoardId",
-      message: { err: "userController.removeBoardId" + e },
-    });
+    return next(
+      createErrorObject(e, 'userController.removeBoardId')
+    );
   }
 };
 
@@ -149,10 +153,9 @@ userController.getBoardIds = (req, res, next) => {
       return next();
     })
     .catch((err) => {
-      return next({
-        log: "error in userController.getBoardIds",
-        message: { err: "userController.getBoardIds" + err },
-      });
+      return next(
+        createErrorObject(err, 'userController.getBoardIds')
+      );
     });
 
 };
