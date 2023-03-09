@@ -1,5 +1,6 @@
 const User = require("../models/userModel");
 const path = require("path");
+const mongoose = require('mongoose');
 
 const userController = {};
 
@@ -37,7 +38,6 @@ userController.createUser = (req, res, next) => {
 
 // Verify user
 userController.verifyUser = async (req, res, next) => {
-  console.log('running userController.verifyUser')
   try {
     const { username, password } = req.body;
     // console.log('req.body: ', req.body);
@@ -62,15 +62,31 @@ userController.verifyUser = async (req, res, next) => {
 };
 
 // this is going to be coming from a patchrequest to add the board we juts created into the usersBoard that created it
-userController.addBoardIds = (req, res, next) => {
-  console.log('inside of userController.addBoardIds req.body:', req.body )
-  let { username } = req.body;
+  // the request body I'll receive is {username: username}
+  // find user by username and update === findOneAndUpdate method thru mongoose
+
+  userController.addBoardId = (req, res, next) => {
+  const { username } = req.body;
+  const board_id = res.locals.board._id;
+  User.findOneAndUpdate({username: username},  
+    {$push: { board_ids: board_id }}, 
+    {new: true}).exec()
+      .then(data => {
+        res.locals.user = data; //not using this at the moment
+        next();
+      })
+      .catch(err => {
+        return next({
+          log: "error in userController.addBoardId",
+          message: { err: "userController.addBoardId" + err},
+        });
+      });
 
 
-}
+};
+
 
 userController.getBoardIds = (req, res, next) => {
-  console.log('running userController.getBoardIds. req.body: ', req.body)
   let { username } = req.body;
 
   User.findOne({ username }).exec()

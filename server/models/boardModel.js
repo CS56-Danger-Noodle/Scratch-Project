@@ -27,10 +27,10 @@ const boardSchema = new Schema({
   boardName: { type: String, required: true, unique: true },
   columns: [
     {
-      columnName: { type: String, required: true, unique: true },
+      columnName: { type: String },
       cards: [
         {
-          cardText: { type: String, required: true, unique: true }
+          cardText: { type: String }
         }
       ]
     }

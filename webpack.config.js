@@ -33,11 +33,12 @@ module.exports = {
       publicPath: "/",
     },
     port: 8080,
+    historyApiFallback: true,
     proxy: {
       "/api": "http://localhost:3000/",
       "/login": "http://localhost:3000/",
       "/signup": "http://localhost:3000/",
-      "/boards": "http://localhost:3000/"
+      "/boards": "http://localhost:3000/",
     },
   },
 };

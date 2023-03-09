@@ -26,9 +26,10 @@ function LoginPage ({user, setUser}) {
             // Eventually add this functionality to route to home page displaying all boards
             //navigate('/boards')   // user.board_ids   // getBoards from backend - boardNames and Id
             // for now we just directly go to the first board
-            navigate(`/boards/${userData.board_ids[0]}`);
+            // navigate(`/boards/${userData.board_ids[0]}`);
+            navigate(`/boards`);
         }).catch((error) => {
-            console.log('incorrect username or password', error)
+            console.log('incorrect username or password: ', error.message)
         }) 
     }
     //RENDER

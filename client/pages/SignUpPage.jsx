@@ -24,7 +24,8 @@ function SignUpPage ({user, setUser}) {
       setUser({user_id: data.user_id, username, board_ids: data.board_ids});
       console.log('user successfully signed up: ', user);
       console.log('data in sign up is: ', data);
-      navigate(`/boards/${data.board_ids[0]}`);
+      // navigate(`/boards/${data.board_ids[0]}`);
+      navigate(`/boards`);
     }). catch((error) => {
       console.log('unable to signup user', error)
     })
