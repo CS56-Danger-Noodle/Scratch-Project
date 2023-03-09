@@ -25,15 +25,10 @@ boardController.createBoard = async (req, res, next) => {
 };
 
 boardController.getBoards = async (req, res, next) => {
-  console.log('starting getboards');
   const username = req.session.username;
-  console.log('username is: ', username);
   try {
     const user = await User.findOne({username});
-    console.log('user is: ', user);
-    console.log('user.board_ids is: ', user.board_ids);
     const boards = await Board.find({'_id': {$in: user.board_ids}});
-    console.log('boards is: ', boards);
     res.locals.boards = boards;
     return next();
   } catch (e) {
@@ -63,8 +58,7 @@ boardController.getBoard = (req, res, next) => {
 boardController.deleteBoard = async (req, res, next) => {
   const { board_id } = req.params;
   try {
-    const response = await Board.findOneAndDelete({_id: board_id});
-    console.log('in delete board, response is ', response);
+    await Board.findOneAndDelete({_id: board_id});
     return next();
   } catch (e) {
     return next({
@@ -72,7 +66,6 @@ boardController.deleteBoard = async (req, res, next) => {
       message: { err: "boardController.getBoard" + err },
     });
   }
-
 };
 
 module.exports = boardController;

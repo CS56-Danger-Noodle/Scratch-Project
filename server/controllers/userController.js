@@ -94,9 +94,7 @@ userController.verifyUser = async (req, res, next) => {
       message: { err: "userController.removeBoardId" + e },
     });
   }
-
 };
-
 
 userController.getBoardIds = (req, res, next) => {
   let { username } = req.body;

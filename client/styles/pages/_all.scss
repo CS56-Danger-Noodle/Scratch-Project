@@ -49,7 +49,6 @@ input {
 }
 
 .boards-list {
-  // outline: 2px solid blue;
   width: max-content;
   display: flex;
   font-size: 30px;
@@ -67,7 +66,6 @@ input {
 }
 
 .boards-page-container {
-  // outline: 2px solid red;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -91,7 +89,6 @@ input {
   display: flex;
   flex-direction: column;
   align-items: center;
-  // margin-right: 30px;
   margin: 30px 15px;
   margin-bottom: 0;
 }
