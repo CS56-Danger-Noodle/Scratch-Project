@@ -41,7 +41,8 @@ sessionController.startSession = (req, res, next) => {
  */
 sessionController.terminateSession = (req, res, next) => {
   console.log("running sessionController.terminateSession");
-  console.log('req.session.username: ', req.session.username);
+  // console.log('req.session.username: ', req.session.username);
+  console.log('req.session:', req.session);
   
   const createErrorObject = (error) => {
     return {
@@ -50,9 +51,20 @@ sessionController.terminateSession = (req, res, next) => {
     };
   }
 
-  // destroy session and move on to next middleware
-  req.session.destroy();
-  return next();
+  // remove sessionID cookie on client side
+
+
+  
+  // destroy session
+  console.log('destroying session')
+  req.session.destroy((error) => {
+    if (error) {
+      return next(createErrorObject(error));
+    } else {
+      res.clearCookie('sessionId');
+      return next();
+    }
+  });
 };
 
 module.exports = sessionController;
