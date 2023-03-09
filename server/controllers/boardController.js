@@ -1,5 +1,5 @@
 const Board = require("../models/boardModel");
-const mongoose = require('mongoose');
+const User = require("../models/userModel");
 
 const boardController = {};
 
@@ -24,21 +24,21 @@ boardController.createBoard = async (req, res, next) => {
   }
 };
 
-boardController.getBoards = (req, res, next) => {
-  let { boardIds } = res.locals;
-
-  Board.find({_id: {$in: boardIds}})   // [ 1, 2, 3]  _id: 1, _id:2, _id:3  [{board1},{board2}]
-    .then(response => {
-      res.locals.boards = response;
-      return next();
-    })
-    .catch((err) => {
-      return next({
-        log: "error in boardController.getBoards",
-        message: { err: "boardController.getBoards" + err },
-      });
+boardController.getBoards = async (req, res, next) => {
+  const username = req.session.username;
+  try {
+    const user = await User.findOne({username});
+    const boards = await Board.find({'_id': {$in: user.board_ids}});
+    res.locals.boards = boards;
+    return next();
+  } catch (e) {
+    return next({
+      log: "error in boardController.getBoards",
+      message: { err: "boardController.getBoards" + e },
     });
+  }
 };
+
 boardController.getBoard = (req, res, next) => {
   const { board_id } = req.params;
 
@@ -55,6 +55,18 @@ boardController.getBoard = (req, res, next) => {
       });
     });
 };
+boardController.deleteBoard = async (req, res, next) => {
+  const { board_id } = req.params;
+  try {
+    await Board.findOneAndDelete({_id: board_id});
+    return next();
+  } catch (e) {
+    return next({
+      log: "error in boardController.getBoard",
+      message: { err: "boardController.getBoard" + err },
+    });
+  }
+};
 
 module.exports = boardController;
 
@@ -62,5 +74,5 @@ module.exports = boardController;
  * select *
  * from Board
  * where id in (1,2,3);
- * 
+ *
  */

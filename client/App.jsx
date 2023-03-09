@@ -9,25 +9,19 @@ import BoardPage from './pages/BoardPage.jsx';
 
 
 const App = () => {
-  // const [ loginError, setLoginError] = useState(false);
   const [ user, setUser ] = useState(null); // refactor to add useEffect here that checks for user in session
 
-  //Refactor Login Errors
-  // useEffect(() => {
-  //   if (loginError === true) alert('Incorrect username or password. Please try again');
-  // }, [loginError])
-
   return (
-    
+
     <>
     <Router>
-      <Navbar 
+      <Navbar
         user={user}
         setUser={setUser}
       />
         <Routes>
-          <Route 
-            path='/' 
+          <Route
+            path='/'
             element={
               user ?
               <BoardsPage
@@ -37,10 +31,10 @@ const App = () => {
                 user={user}
                 setUser={setUser}
               />
-            } 
+            }
           />
-          <Route 
-            path="/login" 
+          <Route
+            path="/login"
             element={
               <LoginPage
                 user={user}
@@ -48,8 +42,8 @@ const App = () => {
               />
             }
           />
-          <Route 
-            path="/signup" 
+          <Route
+            path="/signup"
             element={
               <SignUpPage
                 user={user}
@@ -57,7 +51,7 @@ const App = () => {
               />
             }
           />
-          <Route 
+          <Route
             path='/boards'
             element={
               user ?
@@ -68,21 +62,21 @@ const App = () => {
                 user={user}
                 setUser={setUser}
               />
-            } 
+            }
           />
-          <Route 
+          <Route
             path='/boards/:board_id'
             element={
-              <BoardPage 
+              <BoardPage
                 user={user}
                 setUser={setUser}
               />
-            } 
+            }
           />
         </Routes>
     </Router>
     </>
   );
 }
- 
+
 export default App;

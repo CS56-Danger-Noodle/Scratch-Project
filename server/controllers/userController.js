@@ -124,10 +124,21 @@ userController.addBoardId = (req, res, next) => {
         message: { err: "userController.addBoardId" + err },
       });
     });
-
-
 };
 
+userController.removeBoardId = async (req, res, next) => {
+  const username = req.session.username;
+  const { board_id } = req.params;
+  try {
+    await User.findOneAndUpdate({ username: username }, { $pull: { board_ids: board_id } }, { new: true });
+    return next();
+  } catch (e) {
+    return next({
+      log: "error in userController.removeBoardId",
+      message: { err: "userController.removeBoardId" + e },
+    });
+  }
+};
 
 userController.getBoardIds = (req, res, next) => {
   let { username } = req.body;

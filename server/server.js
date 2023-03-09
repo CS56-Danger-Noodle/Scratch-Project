@@ -84,6 +84,15 @@ app.get(
     res.status(200).json(res.locals.board);
   }
 );
+app.delete(
+  "/boards/:board_id",
+  sessionController.isLoggedIn,
+  boardController.deleteBoard,
+  userController.removeBoardId,
+  (req, res) => {
+    res.sendStatus(200);
+  }
+);
 
 // the request body you'll receive is {username: username}
 app.post(
