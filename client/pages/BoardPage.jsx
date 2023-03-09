@@ -2,10 +2,10 @@ import React from "react";
 import { useState, useEffect } from "react";
 import  { ColumnModal, CardModal } from '../components/Modals.jsx';
 import Column from '../components/Column.jsx';
-import {useParams} from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-function BoardPage({user}) {
+function BoardPage({user, setUser}) {
   // state to render a column creation modal
   const [ showColumnModal, setShowColumnModal ] = useState(false)
   // state to render a card creation modal
@@ -48,6 +48,34 @@ function BoardPage({user}) {
       getBoard();
     }, [])
 
+    const navigate = useNavigate();
+
+    async function logout() {
+      // CREATE SESSION - expected response: cookie and username
+      try {
+        console.log('testing sessionCreate.  expect the response cookie and username test')
+        // make DB call to terminate user
+        const sessionCreateResponse = await axios.get('/sessionTest');
+        console.log('sessionCreateResponse: ', sessionCreateResponse.data)
+      } catch(err) {
+        console.log('error in BoardPage.jsx logout function: ', err.message)
+      }
+
+      // TERMINATE SESSION - expected response: cookie and no username (null)
+      try {
+        console.log('testing terminateSession.  expect response cookie with no username')
+        // make DB call to terminate user
+        const logoutResponse = await axios.get('/logout');
+        console.log('logoutResponse: ', logoutResponse.data)
+        // clear userState
+        setUser(null);
+        // navigate to login page
+        navigate('/login');
+      } catch(err) {
+        console.log('error in BoardPage.jsx logout function: ', err.message)
+      }
+    }
+
     // console.log('BOARD DATA', boardData)
 
     if (boardData) {
@@ -67,7 +95,7 @@ function BoardPage({user}) {
         
         <header className='homeHeader'>
           <h1> Home Page </h1>
-          <button className="logOut" onClick={() => (console.log('logging out'))}>LOG OUT</button>
+          <button className="logOut" onClick={logout}>LOG OUT</button>
 
         </header>
       

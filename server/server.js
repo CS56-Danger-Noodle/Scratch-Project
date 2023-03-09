@@ -89,11 +89,21 @@ app.post(
   }
 );
 
+app.get(
+  "/logout",
+  sessionController.terminateSession,
+  (req, res) => {
+    console.log("completing get request to '/logout");
+    res.status(200).json(req.session);
+  }
+)
+
 app.use('/sessionTest',
+  // sessionController.startSession,
   sessionController.isLoggedIn,
   (req, res) => {
-    console.log('user isLoggedIn successfully.  Returning status 418');
-    res.sendStatus(418);
+    console.log("completing request to '/sessionTest");
+    res.status(200).json(req.session);
   })
 
 app.use("/api", sessionController.isLoggedIn, (req, res) => {
