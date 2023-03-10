@@ -111,7 +111,7 @@ app.post(
 // To add new column
 app.post(
   "/boards/:board_id",
-  // sessionController.isLoggedIn,
+  sessionController.isLoggedIn,
   boardController.addColumn,
   (req, res) => {
     res.status(200).json(res.locals.board)
@@ -138,39 +138,6 @@ app.delete(
 //     res.status(200).json(res.locals.board)
 //   }
 // );
-
-
-// To add new column
-app.post(
-  "/boards/:board_id",
-  // sessionController.isLoggedIn,
-  boardController.addColumn,
-  (req, res) => {
-    res.status(200).json(res.locals.board)
-  }
-);
-
-// To remove column
-app.delete(
-  "/boards/:board_id/:column_id",
-  boardController.removeColumn,
-  (req, res) => {
-    res.status(200).json(res.locals.board)
-  }
-)
-
-//'/boards/:board_id/:column_id/:card_id'
-
-// To add a card
-// app.post(
-//   "/boards/:board_id/:column_id/",
-//   // sessionController.isLoggedIn,
-//   boardController.addCard,
-//   (req, res) => {
-//     res.status(200).json(res.locals.board)
-//   }
-// );
-
 
 app.use("/login", loginRouter);
 

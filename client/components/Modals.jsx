@@ -8,57 +8,15 @@ const ColumnModal = ({ showColumnModal, setShowColumnModal, showCardModal, setSh
 
   const [columnName, setColumnName] = useState('');
   
-  /*
-  boardData {
-    boardName: { type: String, required: true, unique: true },
-      columns: [
-        {
-          columnName: { type: String, required: true, unique: true },
-          cards: [
-            {
-              cardText: { type: String, required: true, unique: true }
-            }
-          ]
-        }
-      ]
-    }
-  */
- 
-
   const saveData = async () => {
-    // get the value from the input field
-    // const newColumnName = document.querySelector('.modal-column-input').value;
-    // store it somewhere (local?)
-    // our local state needs to reflect added column
-    // const columnName = boardData[0]
     try {
       const response = await axios.post(`/boards/${currBoardID}`, {columnName});
       const updatedBoard = response.data;
-      console.log('in save Data, response is: ', response);
       setBoardData(updatedBoard);
     } catch (e) {
       console.log('in save Data, error is: ', e);
     }
-    // const newBoardData = boardData.map(board => {
-    //   if (board._id === currBoardID) {
-    //     board.columns.push({columnName: newColumnName, cards: [{cardText: 'Hello, I\'m a new column!'}]})
-    //   }
-    //   return board;
-    // })
-    // setBoardData(newBoardData)
-
-
-    // [{board1}, {board2}, {board3}]
-    // grab our current board by currBoardID
-    // create a newArrayOfBoards without the currBoard (filter by currBoardID)
-    // update current board
-    // add to array of boards
-    // setBoardData(newArrayOfBoards)
-
-    console.log('save data button is running')
-    setShowColumnModal(!showColumnModal)  //toggle columnModal on / off
-    // setShowCardModal is true, column should also render with reflected data
-    // setShowCardModal(!showCardModal)
+    setShowColumnModal(!showColumnModal) 
   }
 
   const deleteData = () => {
