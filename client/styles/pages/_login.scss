@@ -34,14 +34,6 @@ header {
   font-weight: 900;
 }
 
-#login-alert {
-  color: $color6;
-  margin-top: 0.8rem;
-  visibility: hidden;
-  font-size: 0.95rem;
-  text-align: center;
-}
-
 .loginForm {
   display: flex;
   flex-direction: column;

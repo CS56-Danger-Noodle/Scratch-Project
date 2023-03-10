@@ -59,7 +59,7 @@ function LoginPage({ user, setUser }) {
             <div className="user-login-box">
                 <header>
                     <h1 className='login-header'>Welcome! Sign in here! </h1>
-                    <span id='login-alert' ref={alertRef}>Incorrect username and/or password.</span>
+                    <span className='alert' ref={alertRef}>Incorrect username and/or password.</span>
                 </header>
                 <form className='loginForm' onSubmit={handleSubmit}>
                     <div className='formLine'>
