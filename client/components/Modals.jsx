@@ -58,7 +58,7 @@ const ColumnModal = ({ showColumnModal, setShowColumnModal, showCardModal, setSh
     console.log('save data button is running')
     setShowColumnModal(!showColumnModal)  //toggle columnModal on / off
     // setShowCardModal is true, column should also render with reflected data
-    setShowCardModal(!showCardModal)
+    // setShowCardModal(!showCardModal)
   }
 
   const deleteData = () => {
