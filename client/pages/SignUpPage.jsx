@@ -10,6 +10,8 @@ function SignUpPage({ user, setUser }) {
   const [password, setPassword] = useState('');
   const alertRef = useRef();
 
+  const setAlertTextVisible = () => alertRef.current.style.visibility = 'visible';
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const loginData = { username, password }
@@ -18,22 +20,22 @@ function SignUpPage({ user, setUser }) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(loginData)
     })
-    .then(async (res) => {
-      const status = res.status;
-      const data = await res.json();
-      if (status === 200) {
-        setUser({ username, board_ids: data.board_ids });
-        navigate(`/boards/`);
-      } else if (status === 400 && data.err.includes('already exist')) {
-        alertRef.current.innerHTML = 'Username already exists.<br />Please select a different username.';
-        alertRef.current.style.visibility = 'visible';
-      } else {
-        alertRef.current.innerHTML = 'Unable to sign up. Please try again.';
-        alertRef.current.style.visibility = 'visible';
-      }
-    }).catch((error) => {
-      console.log('unable to signup user', error)
-    })
+      .then(async (res) => {
+        const status = res.status;
+        const data = await res.json();
+        if (status === 200) {
+          setUser({ username, board_ids: data.board_ids });
+          navigate(`/boards/`);
+        } else if (status === 400 && data.err.includes('already exist')) {
+          alertRef.current.innerHTML = 'Username already exists.<br />Please select a different username.';
+          setAlertTextVisible();
+        } else {
+          alertRef.current.innerHTML = 'Unable to sign up. Please try again.';
+          setAlertTextVisible();
+        }
+      }).catch((error) => {
+        console.log('unable to signup user', error)
+      })
   }
 
   const handleInputChange = ({ target }, callback) => {
@@ -47,7 +49,7 @@ function SignUpPage({ user, setUser }) {
       <div className="user-login-box">
         <header>
           <h1 className='login-header'>Create a new Account:</h1>
-          <span id='login-alert' ref={alertRef}></span>
+          <span className='alert' ref={alertRef}></span>
         </header>
         <form className='loginForm' onSubmit={handleSubmit}>
           <div className='formLine'>

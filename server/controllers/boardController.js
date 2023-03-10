@@ -12,6 +12,13 @@ boardController.createBoard = async (req, res, next) => {
     res.locals.board = response;
     return next();
   } catch (e) {
+    if (e.code === 11000) {
+      return next({
+        log: e,
+        status: 400,
+        message: { err: 'board name already exists' },
+      })
+    }
     return next(
       createErrorObject(e, 'boardController.createBoard')
     );

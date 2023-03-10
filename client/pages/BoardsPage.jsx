@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from 'axios';
 import { Link } from "react-router-dom";
 
 function BoardsPage({ user }) {
-
   const [boardName, setBoardName] = useState('');
   const [boards, setBoards] = useState([]);
   const [loading, setLoading] = useState(true);
   const username = user.username;
+  const alertRef = useRef();
+
+  const setAlertTextVisible = () => alertRef.current.style.visibility = 'visible';
 
   useEffect(() => {
     try {
@@ -25,11 +27,33 @@ function BoardsPage({ user }) {
 
   const createBoard = async () => {
     try {
-      const response = await axios.post('/boards', { boardName, username }, { withCredentials: true });
-      const newBoard = response.data;
-      setBoards(prevBoards => [...prevBoards, newBoard]);
+      if (boardName === '') {
+        alertRef.current.innerHTML = 'Please enter a board name.';
+        setAlertTextVisible();
+      } else {
+        const response = await axios.post(
+          '/boards',
+          { boardName, username },
+          { withCredentials: true }
+        );
+        const newBoard = response.data;
+        setBoards(prevBoards => [...prevBoards, newBoard]);
+      }
     } catch (e) {
-      console.log('in createBoard, error is: ', e.message);
+      const { response } = e;
+      if (response) {
+        const { status, data } = response;
+        if (status === 400 && data.err.includes('already exist')) {
+          alertRef.current.innerHTML = 'Board name already exists. Please select a different name.';
+          setAlertTextVisible();
+        } else {
+          alertRef.current.innerHTML = 'Failed to create a new board. Please try again.';
+          setAlertTextVisible();
+        }
+      } else {
+        console.log(e);
+        console.log('in createBoard, error is: ', e.message);
+      }
     }
   }
 
@@ -42,6 +66,11 @@ function BoardsPage({ user }) {
     }
   }
 
+  const handleBoardInputChange = (e) => {
+    setBoardName(e.target.value);
+    if (alertRef.current.style.visibility === 'visible') alertRef.current.style.visibility = 'hidden';
+  }
+
   const boardLinks = boards.map(board => (
     <li className="board-li" key={board._id}>
       <Link to={`/boards/${board._id}`} className="board-link" id={board._id}>{board.boardName}</Link>
@@ -51,8 +80,11 @@ function BoardsPage({ user }) {
 
   return (
     <div className="boards-page-container">
-      <input className="create-board-input" onChange={e => setBoardName(e.target.value)} value={boardName} placeholder="Board name"></input>
-      <button className="create-board-button" onClick={createBoard}>Create Board</button>
+      <section className='boards-page-input'>
+        <span className='alert' ref={alertRef}></span>
+        <input className="create-board-input" onChange={handleBoardInputChange} value={boardName} placeholder="Board name"></input>
+        <button className="create-board-button" onClick={createBoard}>Create Board</button>
+      </section>
       <div className="boards-list-container">
         <h1 className="boards-page-heading">
           {!loading && (boards.length > 0 ? 'My Boards' : 'No Boards Currently')}
