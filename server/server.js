@@ -7,6 +7,8 @@ const userController = require("./controllers/userController");
 const sessionController = require("./controllers/sessionController");
 const boardController = require("./controllers/boardController");
 
+const loginRouter = require('./router/loginRouter');
+
 // setup app and port
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -85,6 +87,15 @@ app.get(
     res.status(200).json(res.locals.board);
   }
 );
+app.delete(
+  "/boards/:board_id",
+  sessionController.isLoggedIn,
+  boardController.deleteBoard,
+  userController.removeBoardId,
+  (req, res) => {
+    res.sendStatus(200);
+  }
+);
 
 // To add new Board
 app.post(
@@ -129,15 +140,39 @@ app.delete(
 // );
 
 
+// To add new column
 app.post(
-  "/login",
-  userController.verifyUser,
-  sessionController.startSession,
-  (_, res) => {
-    console.log("completing post request to '/login");
-    res.status(200).json(res.locals.user);
+  "/boards/:board_id",
+  // sessionController.isLoggedIn,
+  boardController.addColumn,
+  (req, res) => {
+    res.status(200).json(res.locals.board)
   }
 );
+
+// To remove column
+app.delete(
+  "/boards/:board_id/:column_id",
+  boardController.removeColumn,
+  (req, res) => {
+    res.status(200).json(res.locals.board)
+  }
+)
+
+//'/boards/:board_id/:column_id/:card_id'
+
+// To add a card
+// app.post(
+//   "/boards/:board_id/:column_id/",
+//   // sessionController.isLoggedIn,
+//   boardController.addCard,
+//   (req, res) => {
+//     res.status(200).json(res.locals.board)
+//   }
+// );
+
+
+app.use("/login", loginRouter);
 
 app.post(
   "/signup",

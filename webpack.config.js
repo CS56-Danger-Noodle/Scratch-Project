@@ -36,7 +36,7 @@ module.exports = {
     proxy: [
       {
         context: ['/api', '/login', '/logout', '/signup', '/boards', '/sessionTest'],
-        target: 'http://localhost:3000',
+        target: 'http://localhost:3000/',
       }
     ]
   },

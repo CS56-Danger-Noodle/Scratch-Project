@@ -3,6 +3,10 @@ body {
   font-family: $mainFont;
 }
 
+* {
+  // outline: 1px solid lime;
+}
+
 .navbar {
   display: flex;
   height: 40px;
@@ -29,4 +33,128 @@ h1 {
 
 button:hover {
   cursor: pointer;
+}
+
+input {
+  font-family: $mainFont;
+}
+
+.create-board-input {
+  border: none;
+  outline: none;
+  border-bottom: 1px solid gray;
+  text-align: center;
+  font-size: 30px;
+  margin-top: 10px;
+}
+
+.boards-list {
+  width: max-content;
+  display: flex;
+  font-size: 30px;
+  align-items: center;
+  justify-content: center;
+  // margin-top: 30px;
+}
+
+.delete-board-button {
+  font-size: 14px;
+  padding: 8px 10px;
+  margin-top: 9px;
+  box-shadow: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.16), 0 1px 2px rgba(0, 0, 0, 0.23);
+}
+
+.boards-page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.boards-list-container {
+  text-align: center;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  border-radius: 5px;
+  padding: 30px;
+  margin-top: 40px;
+  transition: all .2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.boards-list-container:hover {
+  box-shadow: 0 5px 7px rgba(0, 0, 0, 0.16), 0 5px 8px rgba(0, 0, 0, 0.23);
+}
+
+.boards-page-input {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.board-li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 30px 15px;
+  margin-bottom: 0;
+}
+
+.board-link:hover {
+  text-decoration: underline;
+}
+
+.boards-page-heading {
+  font-size: 40px;
+}
+
+.create-board-button {
+  background: #84c5be;
+  margin-top: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.16), 0 3px 5px rgba(0, 0, 0, 0.23);
+}
+
+button {
+  transition: all .2s ease;
+}
+
+button:active {
+  box-shadow: inset 5px 5px 10px -3px rgba(0, 0, 0, 0.7);
+}
+
+.loader {
+  width: 48px;
+  height: 48px;
+  border: 5px solid;
+  border-color: #FF3D00 transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loader.hidden {
+  display: none;
+}
+
+.alert {
+  color: $color6;
+  margin-top: 0.8rem;
+  visibility: hidden;
+  font-size: 0.95rem;
+  text-align: center;
 }
