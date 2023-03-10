@@ -8,6 +8,7 @@ const sessionController = require("./controllers/sessionController");
 const boardController = require("./controllers/boardController");
 
 const loginRouter = require('./router/loginRouter');
+const boardRouter = require('./router/boardRouter');
 
 // setup app and port
 const app = express();
@@ -66,77 +67,7 @@ app.post(
   }
 );
 
-// To get all boards
-app.get(
-  "/boards",
-  sessionController.isLoggedIn,
-  boardController.getBoards,
-  (req, res) => {
-    res.status(200).json(res.locals.boards);
-  }
-);
-
-// To get specific board
-app.get(
-  "/boards/:board_id",
-  sessionController.isLoggedIn,
-  boardController.getBoard,
-  (req, res) => {
-    res.status(200).json(res.locals.board);
-  }
-);
-app.delete(
-  "/boards/:board_id",
-  sessionController.isLoggedIn,
-  boardController.deleteBoard,
-  userController.removeBoardId,
-  (req, res) => {
-    res.sendStatus(200);
-  }
-);
-
-// To add new Board
-app.post(
-  "/boards",
-  sessionController.isLoggedIn,
-  boardController.createBoard,
-  userController.addBoardId,
-  (req, res) => {
-    res.status(200).json(res.locals.board);
-  }
-);
-
-// To add new column
-app.post(
-  "/boards/:board_id",
-  sessionController.isLoggedIn,
-  boardController.addColumn,
-  (req, res) => {
-    res.status(200).json(res.locals.board)
-  }
-);
-
-// To remove column
-app.delete(
-  "/boards/:board_id/:column_id",
-  boardController.removeColumn,
-  (req, res) => {
-    res.status(200).json(res.locals.board)
-  }
-)
-
-//'/boards/:board_id/:column_id/:card_id'
-
-// To add a card
-// app.post(
-//   "/boards/:board_id/:column_id/",
-//   // sessionController.isLoggedIn,
-//   boardController.addCard,
-//   (req, res) => {
-//     res.status(200).json(res.locals.board)
-//   }
-// );
-
+app.use('/boards', boardRouter);
 app.use("/login", loginRouter);
 
 app.post(
