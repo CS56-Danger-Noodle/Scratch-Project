@@ -16,16 +16,14 @@ const PORT = process.env.PORT || 3000;
 const SECRET = "PpHbKAXUt6iC5Z80OWrGwKNVYQsOqdra";
 const ONE_DAY = 1000 * 60 * 60 * 24;
 
-const mongoURI =
-  "mongodb+srv://jjhuang3:codesmith123@cluster0.odachgf.mongodb.net/?retryWrites=true&w=majority";
-mongoose
-  .connect(mongoURI, {
-    // options for the connect method to parse the URI
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    // sets the name of the DB that our collections are part of
-    dbName: "tmnt",
-  })
+const mongoURI = "your-mongo-db-uri";
+mongoose.connect(mongoURI, {
+  // options for the connect method to parse the URI
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  // sets the name of the DB that our collections are part of
+  dbName: "tmnt",
+})
   .then(() => console.log("Connected to Mongo DB."))
   .catch((err) => console.log(err));
 

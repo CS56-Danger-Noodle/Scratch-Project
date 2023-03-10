@@ -9,28 +9,28 @@ import BoardPage from './pages/BoardPage.jsx';
 
 
 const App = () => {
-  const [ user, setUser ] = useState(null); // refactor to add useEffect here that checks for user in session
+  const [user, setUser] = useState(null); // refactor to add useEffect here that checks for user in session
 
   return (
 
     <>
-    <Router>
-      <Navbar
-        user={user}
-        setUser={setUser}
-      />
+      <Router>
+        <Navbar
+          user={user}
+          setUser={setUser}
+        />
         <Routes>
           <Route
             path='/'
             element={
               user ?
-              <BoardsPage
-              user={user}
-              /> :
-              <LoginPage
-                user={user}
-                setUser={setUser}
-              />
+                <BoardsPage
+                  user={user}
+                /> :
+                <LoginPage
+                  user={user}
+                  setUser={setUser}
+                />
             }
           />
           <Route
@@ -55,13 +55,13 @@ const App = () => {
             path='/boards'
             element={
               user ?
-              <BoardsPage
-                user={user}
-              /> :
-              <LoginPage
-                user={user}
-                setUser={setUser}
-              />
+                <BoardsPage
+                  user={user}
+                /> :
+                <LoginPage
+                  user={user}
+                  setUser={setUser}
+                />
             }
           />
           <Route
@@ -74,7 +74,7 @@ const App = () => {
             }
           />
         </Routes>
-    </Router>
+      </Router>
     </>
   );
 }
