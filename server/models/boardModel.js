@@ -22,6 +22,20 @@ BOARD {
   ]
 }
 
+const cardSchema = new Schema({
+  cardText: { type: String }
+})
+
+const columnSchema = new Schema({
+  columnName: {type: String},
+  cards: [{ type: [cardSchema] }] 
+})
+
+const boardSchema = new Schema({
+  boardName: { type: String, required: true, unique: true },
+  columns: [{ type: [columnSchema] }]
+})
+
 */
 const boardSchema = new Schema({
   boardName: { type: String, required: true, unique: true },

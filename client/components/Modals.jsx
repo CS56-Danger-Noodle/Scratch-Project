@@ -1,9 +1,12 @@
 import React, { Component } from "react";
 import { useState, useEffect } from "react";
 import Column from './Column.jsx'
+import axios from 'axios';
 
 // Modal for the columns
 const ColumnModal = ({ showColumnModal, setShowColumnModal, showCardModal, setShowCardModal, boardData, setBoardData, currBoardID}) => {
+
+  const [columnName, setColumnName] = useState('');
   
   /*
   boardData {
@@ -22,20 +25,27 @@ const ColumnModal = ({ showColumnModal, setShowColumnModal, showCardModal, setSh
   */
  
 
-  const saveData = () => {
+  const saveData = async () => {
     // get the value from the input field
-    const newColumnName = document.querySelector('.modal-column-input').value;
+    // const newColumnName = document.querySelector('.modal-column-input').value;
     // store it somewhere (local?)
     // our local state needs to reflect added column
-    const columnName = boardData[0]
-
-    const newBoardData = boardData.map(board => {
-      if (board._id === currBoardID) {
-        board.columns.push({columnName: newColumnName, cards: [{cardText: 'Hello, I\'m a new column!'}]})
-      }
-      return board;
-    })
-    setBoardData(newBoardData)
+    // const columnName = boardData[0]
+    try {
+      const response = await axios.post(`/boards/${currBoardID}`, {columnName});
+      const updatedBoard = response.data;
+      console.log('in save Data, response is: ', response);
+      setBoardData(updatedBoard);
+    } catch (e) {
+      console.log('in save Data, error is: ', e);
+    }
+    // const newBoardData = boardData.map(board => {
+    //   if (board._id === currBoardID) {
+    //     board.columns.push({columnName: newColumnName, cards: [{cardText: 'Hello, I\'m a new column!'}]})
+    //   }
+    //   return board;
+    // })
+    // setBoardData(newBoardData)
 
 
     // [{board1}, {board2}, {board3}]
@@ -65,6 +75,8 @@ const ColumnModal = ({ showColumnModal, setShowColumnModal, showCardModal, setSh
           type="text"
           required
           placeholder="column name"
+          value={columnName}
+          onChange={(e) => setColumnName(e.target.value)}
           // do we want an onChange here or wait until the input is finished
         />
       </form>
@@ -74,8 +86,8 @@ const ColumnModal = ({ showColumnModal, setShowColumnModal, showCardModal, setSh
             SAVE
         </button>
         <button className="modal-text-button"
-          onClick={() => deleteData()}>
-            DELETE
+          onClick={() => setShowColumnModal(false)}>
+            CANCEL
         </button>
       </div>
 

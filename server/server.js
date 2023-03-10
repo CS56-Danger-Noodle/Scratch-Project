@@ -66,6 +66,7 @@ app.post(
   }
 );
 
+// To get all boards
 app.get(
   "/boards",
   sessionController.isLoggedIn,
@@ -74,6 +75,8 @@ app.get(
     res.status(200).json(res.locals.boards);
   }
 );
+
+// To get specific board
 app.get(
   "/boards/:board_id",
   sessionController.isLoggedIn,
@@ -83,7 +86,7 @@ app.get(
   }
 );
 
-// the request body you'll receive is {username: username}
+// To add new Board
 app.post(
   "/boards",
   sessionController.isLoggedIn,
@@ -93,6 +96,38 @@ app.post(
     res.status(200).json(res.locals.board);
   }
 );
+
+// To add new column
+app.post(
+  "/boards/:board_id",
+  // sessionController.isLoggedIn,
+  boardController.addColumn,
+  (req, res) => {
+    res.status(200).json(res.locals.board)
+  }
+);
+
+// To remove column
+app.delete(
+  "/boards/:board_id/:column_id",
+  boardController.removeColumn,
+  (req, res) => {
+    res.status(200).json(res.locals.board)
+  }
+)
+
+//'/boards/:board_id/:column_id/:card_id'
+
+// To add a card
+// app.post(
+//   "/boards/:board_id/:column_id/",
+//   // sessionController.isLoggedIn,
+//   boardController.addCard,
+//   (req, res) => {
+//     res.status(200).json(res.locals.board)
+//   }
+// );
+
 
 app.post(
   "/login",
