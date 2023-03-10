@@ -30,11 +30,11 @@ mongoose.connect(mongoURI, {
 // handle parsing request body
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 // By default, the session `store` instance defaults to a new `MemoryStore` instance
 // It is NOT intended to be used in production
 // If this application moves to production, a different store instance
 // (e.g. MongoDB, redis) needs to be setup
-
 app.use(
   session({
     secret: SECRET,

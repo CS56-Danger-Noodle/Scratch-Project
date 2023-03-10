@@ -1,15 +1,13 @@
-import React, { Component } from "react";
-import { useState, useEffect } from "react";
+import React from "react";
 import axios from 'axios';
-// import { CardModal } from "./Modals";
 
 
 
-function Column ({columnName, cards, setShowCardModal, id, board_id, setBoardData}) {
+function Column({ columnName, cards, setShowCardModal, id, board_id, setBoardData }) {
   const renderCards = cards.map((card, index) => {
     return (<div key={index} className='card'>{card.cardText}</div>);
   })
-  
+
   const removeColumn = async () => {
     try {
       const response = await axios.delete(`/boards/${board_id}/${id}`);
@@ -23,10 +21,10 @@ function Column ({columnName, cards, setShowCardModal, id, board_id, setBoardDat
     <div className='columnCont'>
       <div>{columnName}</div>
       <div className='cardCont'>
-      {renderCards}
+        {renderCards}
       </div>
-    <button onClick={() => setShowCardModal(true)}>ADD CARD</button>
-    <button onClick={removeColumn}>REMOVE COLUMN</button>
+      <button onClick={() => setShowCardModal(true)}>ADD CARD</button>
+      <button onClick={removeColumn}>REMOVE COLUMN</button>
     </div>
   );
 }

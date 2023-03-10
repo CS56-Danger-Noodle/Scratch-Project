@@ -5,7 +5,7 @@ import axios from 'axios';
 
 function LoginPage({ user, setUser }) {
     const navigate = useNavigate();
-    const [username, setUsername] = useState(''); //<-- Switch to an empty string when ready
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const alertRef = useRef();
 

@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 function SignUpPage({ user, setUser }) {
 
   const navigate = useNavigate();
-  const [username, setUsername] = useState(''); //<-- Switch to an empty string when ready
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const alertRef = useRef();
 
