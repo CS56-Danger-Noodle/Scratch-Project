@@ -1,0 +1,81 @@
+.loginCont {
+  width: 100vw;
+  height: calc(100vh - 80px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: $color3;
+}
+
+.user-login-box {
+  border: thin solid rgb(183, 181, 181);
+  display: flex;
+  background-color: $color2;
+  border: 5px $color1 solid;
+  border-radius: 15px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+}
+
+header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 40px 5px 40px;
+}
+
+.login-header {
+  color: $color1;
+  font-size: 30px;
+  font-weight: 900;
+}
+
+.loginForm {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  margin: 15px auto 20px auto;
+}
+
+.login-text {
+  font-size: 12px;
+}
+
+.formLine {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-input {
+  width: 150px;
+  height: 30px;
+  border: 1px $color1 solid;
+  background-color: $color2;
+  border-radius: 5px;
+  margin: 1px;
+  margin-top: 4px;
+  padding: 2px 10px;
+
+  &:focus {
+    outline: 2px $color1 solid;
+  }
+}
+
+.login-footer {
+  display: flex;
+  gap: 15px;
+
+  span {
+    align-self: center;
+  }
+}
+
+.google-signin {
+  margin-bottom: 30px;
+}

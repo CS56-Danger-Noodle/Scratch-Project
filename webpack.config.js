@@ -1,11 +1,11 @@
-const path = require('path');
-const HTMLWebpackPlugin = require('html-webpack-plugin');
+const path = require("path");
+const HTMLWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
-  entry: './client/index.js',
+  entry: "./client/index.js",
   output: {
-    path: path.resolve(__dirname, 'build'),
-    filename: 'bundle.js',
+    path: path.resolve(__dirname, "build"),
+    filename: "bundle.js",
   },
   mode: process.env.NODE_ENV,
   module: {
@@ -14,29 +14,30 @@ module.exports = {
         test: /.jsx?$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader',
+          loader: "babel-loader",
           options: {
-            presets: ['@babel/preset-react', '@babel/preset-env']
-          }
-        }
+            presets: ["@babel/preset-react", "@babel/preset-env"],
+          },
+        },
       },
       {
         test: /.(scss|sass|css)$/,
-        use: ["style-loader", "css-loader", "sass-loader"]
+        use: ["style-loader", "css-loader", "sass-loader"],
       },
-    ]
+    ],
   },
-  plugins: [
-    new HTMLWebpackPlugin({template: './index.html'})
-  ],
+  plugins: [new HTMLWebpackPlugin({ template: "./index.html" })],
   devServer: {
     static: {
-      directory: path.resolve(__dirname, 'build'),
-      publicPath: '/'
+      directory: path.resolve(__dirname, "build"),
+      publicPath: "/",
     },
     port: 8080,
-    proxy: {
-      '/api': 'http://localhost:3000'
-    }
-  }
-}
+    proxy: [
+      {
+        context: ['/api', '/login', '/logout', '/signup', '/boards', '/sessionTest'],
+        target: 'http://localhost:3000/',
+      }
+    ]
+  },
+};
