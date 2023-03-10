@@ -35,3 +35,18 @@
   z-index: 998;
   background: rgba(0, 0, 0, 0.3);
 }
+
+.boards-page-container {
+  background-color: $color3;
+  height: calc(100vh - 80px);
+}
+
+.boards-list-container {
+  background-color: $color2;
+  border-radius: 15px;
+  border: 5px $color1 solid;
+}
+
+.create-board-input {
+  background-color: $color3;
+}
