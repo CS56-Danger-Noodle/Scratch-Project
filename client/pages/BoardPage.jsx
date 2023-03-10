@@ -10,7 +10,7 @@ function BoardPage({user, setUser}) {
   const [ showColumnModal, setShowColumnModal ] = useState(false)
   // state to render a card creation modal
   const [ showCardModal, setShowCardModal ] = useState(false)
-  // const [columnsState, setColumns] = useState(null);
+  const [columnsState, setColumns] = useState(null);
   const [ boardData, setBoardData ] = useState(null);
   const { board_id } = useParams();
 
@@ -36,6 +36,10 @@ function BoardPage({user, setUser}) {
     //This is real code do not delete:
     let renderColumns = [];
 
+    const addNewColumn = () => {
+
+    }
+
     useEffect(() => {
       const getBoard = async () => {
         try {
@@ -52,7 +56,7 @@ function BoardPage({user, setUser}) {
 
     if (boardData) {
       renderColumns = boardData.columns.map((column, index) => {
-          return (<Column key={index} columnName={column.columnName} cards={column.cards} setShowCardModal={setShowCardModal}/>)
+          return (<Column key={index} id={column._id} board_id={board_id} columnName={column.columnName} cards={column.cards} setShowCardModal={setShowCardModal} setBoardData={setBoardData}/>)
         })
     }
     let overlay = null;
@@ -76,7 +80,7 @@ function BoardPage({user, setUser}) {
               showCardModal={showCardModal} 
               setShowCardModal={setShowCardModal}
               boardData={boardData}
-              currBoardID={currBoardID}
+              currBoardID={board_id }
               setBoardData={setBoardData} />) 
               : (<></>)
             }
